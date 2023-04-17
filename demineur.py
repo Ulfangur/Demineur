@@ -7,7 +7,6 @@ class Grille:
         self.taille = 16
         self.tableau_jeu = [[0 for i in range(self.taille)]for j in range(self.taille)]
 
-
     def affichage(self):
         """
         Affichage du tableau de jeu
@@ -33,6 +32,7 @@ class Grille:
                 y = randint(0,self.taille-1) 
                 unefois = False
             self.tableau_jeu[x][y] = -1
+            #Version brute d'addition du nombre de bombes autour
             if (x==0):
                 if (y==0):
                     if (self.tableau_jeu[0][1] != -1):
@@ -141,7 +141,12 @@ def verification(Tab):
             if (Tab.tableau_jeu[i][j] == -1):
                 compteur = compteur + 1
     print(compteur)    
-    #verification(Test)
+
+
+Test = Grille()
+Test.affichage()
+Test.tableau_mine_init()
+Test.affichage()
 #verification(Test)
 
 
