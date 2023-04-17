@@ -1,10 +1,17 @@
 from random import randint
 class Grille:
     def __init__(self):
+        """
+        Initialisation de la taille du tableau et de son contenu
+        """
         self.taille = 16
         self.tableau_jeu = [[0 for i in range(self.taille)]for j in range(self.taille)]
 
+
     def affichage(self):
+        """
+        Affichage du tableau de jeu
+        """
         for i in range(self.taille):
             chaine:str = ""
             for j in range(self.taille):
@@ -12,6 +19,10 @@ class Grille:
             print(chaine, "\n")
 
     def tableau_mine_init(self):
+        """
+        Génération des Bombes
+        Génération du nombre de Bombe a un point x y (si ce point ne contient pas de bombe)
+        """
         nombre_bombes:int = 50
         x:int = 0
         y:int = 0
@@ -130,10 +141,7 @@ def verification(Tab):
             if (Tab.tableau_jeu[i][j] == -1):
                 compteur = compteur + 1
     print(compteur)    
-    
-    
-Test = Grille()
-Test.affichage()
-Test.tableau_mine_init()
-Test.affichage()
+    #verification(Test)
 #verification(Test)
+
+
