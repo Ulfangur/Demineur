@@ -16,7 +16,7 @@ class Grille:
             for j in range(self.taille):
                 chaine = chaine + " " + str(self.tableau_jeu[i][j])
             print(chaine, "\n")
-
+    #Il faudrait ajouter un programme qui charge une map démineur par un fichier.
     def tableau_mine_init(self):
         """
         Génération des Bombes
@@ -143,10 +143,12 @@ def verification(Tab):
     print(compteur)    
 
 
-Test = Grille()
-Test.affichage()
-Test.tableau_mine_init()
-Test.affichage()
+Reponse = Grille()
+Reponse.affichage()
+Reponse.tableau_mine_init()
+Reponse.affichage()
+
+
 #verification(Test)
 
 
