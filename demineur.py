@@ -97,22 +97,22 @@ class Grille:
                 if (self.tableau_jeu[x+1][self.taille-1] != -1):
                     self.tableau_jeu[x+1][self.taille-1] = self.tableau_jeu[x+1][self.taille-1] + 1
             else:
-                if(self.tableau_jeu[][] != -1):
-                    self.tableau_jeu[][] = self.tableau_jeu[][] + 1
-                if(self.tableau_jeu[][] != -1):
-                    self.tableau_jeu[][] = self.tableau_jeu[][] + 1
-                if(self.tableau_jeu[][] != -1):
-                    self.tableau_jeu[][] = self.tableau_jeu[][] + 1
-                if(self.tableau_jeu[][] != -1):
-                    self.tableau_jeu[][] = self.tableau_jeu[][] + 1
-                if(self.tableau_jeu[][] != -1):
-                    self.tableau_jeu[][] = self.tableau_jeu[][] + 1
-                if(self.tableau_jeu[][] != -1):
-                    self.tableau_jeu[][] = self.tableau_jeu[][] + 1
-                if(self.tableau_jeu[][] != -1):
-                    self.tableau_jeu[][] = self.tableau_jeu[][] + 1
-                if(self.tableau_jeu[][] != -1):
-                    self.tableau_jeu[][] = self.tableau_jeu[][] + 1
+                if(self.tableau_jeu[x-1][y-1] != -1):
+                    self.tableau_jeu[x-1][y-1] = self.tableau_jeu[x-1][y-1] + 1
+                if(self.tableau_jeu[x-1][y] != -1):
+                    self.tableau_jeu[x-1][y] = self.tableau_jeu[x-1][y] + 1
+                if(self.tableau_jeu[x-1][y+1] != -1):
+                    self.tableau_jeu[x-1][y+1] = self.tableau_jeu[x-1][y+1] + 1
+                if(self.tableau_jeu[x][y-1] != -1):
+                    self.tableau_jeu[x][y-1] = self.tableau_jeu[x][y-1] + 1
+                if(self.tableau_jeu[x][y+1] != -1):
+                    self.tableau_jeu[x][y+1] = self.tableau_jeu[x][y+1] + 1
+                if(self.tableau_jeu[x+1][y-1] != -1):
+                    self.tableau_jeu[x+1][y-1] = self.tableau_jeu[x+1][y-1] + 1
+                if(self.tableau_jeu[x+1][y] != -1):
+                    self.tableau_jeu[x+1][y] = self.tableau_jeu[x+1][y] + 1
+                if(self.tableau_jeu[x+1][y+1] != -1):
+                    self.tableau_jeu[x+1][y+1] = self.tableau_jeu[x+1][y+1] + 1
             print(x, " ", y, " ", i)
             unefois = True
 
