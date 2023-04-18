@@ -83,5 +83,3 @@ def Revele(Grille_Reponse,Grille_Joueur,x,y,Joueur):
                     else:
                         if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
                             Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
-
-            
