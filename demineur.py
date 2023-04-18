@@ -34,31 +34,7 @@ class Grille:
             self.tableau_jeu[x][y] = -1
             #Version brute d'addition du nombre de bombes autour
             if (x==0):
-                if (y==0):
-                    if (self.tableau_jeu[0][1] != -1):
-                        self.tableau_jeu[0][1] = self.tableau_jeu[0][1] + 1 
-                    if (self.tableau_jeu[1][1] != -1):
-                        self.tableau_jeu[1][1] = self.tableau_jeu[1][1] + 1 
-                    if (self.tableau_jeu[1][0] != -1):
-                        self.tableau_jeu[1][0] = self.tableau_jeu[1][0] + 1 
-                elif (y==self.taille-1):
-                    if (self.tableau_jeu[1][self.taille-1] != -1):
-                        self.tableau_jeu[1][self.taille-1] = self.tableau_jeu[1][self.taille-1] + 1 
-                    if (self.tableau_jeu[1][self.taille-2] != -1):
-                        self.tableau_jeu[1][self.taille-2] = self.tableau_jeu[1][self.taille-2] + 1 
-                    if (self.tableau_jeu[0][self.taille-2] != -1):
-                        self.tableau_jeu[0][self.taille-2] = self.tableau_jeu[0][self.taille-2] + 1 
-                else:
-                    if (self.tableau_jeu[0][y-1] != -1):
-                        self.tableau_jeu[0][y-1] = self.tableau_jeu[0][y-1] + 1
-                    if (self.tableau_jeu[0][y+1] != -1):
-                        self.tableau_jeu[0][y+1] = self.tableau_jeu[0][y+1] +1
-                    if (self.tableau_jeu[1][y-1] != -1):
-                        self.tableau_jeu[1][y-1] = self.tableau_jeu[1][y-1] +1
-                    if (self.tableau_jeu[1][y] != -1):
-                        self.tableau_jeu[1][y] = self.tableau_jeu[1][y] +1
-                    if (self.tableau_jeu[1][y+1] != -1):
-                        self.tableau_jeu[1][y+1] = self.tableau_jeu[1][y+1] +1
+                self.cas_haut(x,y)
             elif (x == self.taille-1):
                 if (y==0):
                     if (self.tableau_jeu[self.taille-1][1] != -1):
@@ -108,24 +84,61 @@ class Grille:
                 if (self.tableau_jeu[x+1][self.taille-1] != -1):
                     self.tableau_jeu[x+1][self.taille-1] = self.tableau_jeu[x+1][self.taille-1] + 1
             else:
-                if(self.tableau_jeu[x-1][y-1] != -1):
-                    self.tableau_jeu[x-1][y-1] = self.tableau_jeu[x-1][y-1] + 1
-                if(self.tableau_jeu[x-1][y] != -1):
-                    self.tableau_jeu[x-1][y] = self.tableau_jeu[x-1][y] + 1
-                if(self.tableau_jeu[x-1][y+1] != -1):
-                    self.tableau_jeu[x-1][y+1] = self.tableau_jeu[x-1][y+1] + 1
-                if(self.tableau_jeu[x][y-1] != -1):
-                    self.tableau_jeu[x][y-1] = self.tableau_jeu[x][y-1] + 1
-                if(self.tableau_jeu[x][y+1] != -1):
-                    self.tableau_jeu[x][y+1] = self.tableau_jeu[x][y+1] + 1
-                if(self.tableau_jeu[x+1][y-1] != -1):
-                    self.tableau_jeu[x+1][y-1] = self.tableau_jeu[x+1][y-1] + 1
-                if(self.tableau_jeu[x+1][y] != -1):
-                    self.tableau_jeu[x+1][y] = self.tableau_jeu[x+1][y] + 1
-                if(self.tableau_jeu[x+1][y+1] != -1):
-                    self.tableau_jeu[x+1][y+1] = self.tableau_jeu[x+1][y+1] + 1
-            print(x, " ", y, " ", i)
+                self.cas_normal(x,y)
             unefois = True
+    def cas_coin_haut_gauche(self,x,y):
+        if (self.tableau_jeu[0][1] != -1):
+            self.tableau_jeu[0][1] = self.tableau_jeu[0][1] + 1 
+        if (self.tableau_jeu[1][1] != -1):
+            self.tableau_jeu[1][1] = self.tableau_jeu[1][1] + 1 
+        if (self.tableau_jeu[1][0] != -1):
+            self.tableau_jeu[1][0] = self.tableau_jeu[1][0] + 1
+
+    def cas_coin_haut_droite(self,x,y):
+        if (self.tableau_jeu[1][self.taille-1] != -1):
+            self.tableau_jeu[1][self.taille-1] = self.tableau_jeu[1][self.taille-1] + 1 
+        if (self.tableau_jeu[1][self.taille-2] != -1):
+            self.tableau_jeu[1][self.taille-2] = self.tableau_jeu[1][self.taille-2] + 1 
+        if (self.tableau_jeu[0][self.taille-2] != -1):
+            self.tableau_jeu[0][self.taille-2] = self.tableau_jeu[0][self.taille-2] + 1
+
+    def cas_haut_longueur(self,x,y):
+        if (self.tableau_jeu[0][y-1] != -1):
+            self.tableau_jeu[0][y-1] = self.tableau_jeu[0][y-1] + 1
+        if (self.tableau_jeu[0][y+1] != -1):
+            self.tableau_jeu[0][y+1] = self.tableau_jeu[0][y+1] +1
+        if (self.tableau_jeu[1][y-1] != -1):
+            self.tableau_jeu[1][y-1] = self.tableau_jeu[1][y-1] +1
+        if (self.tableau_jeu[1][y] != -1):
+            self.tableau_jeu[1][y] = self.tableau_jeu[1][y] +1
+        if (self.tableau_jeu[1][y+1] != -1):
+            self.tableau_jeu[1][y+1] = self.tableau_jeu[1][y+1] +1
+    
+    def cas_haut(self,x,y):
+        if (y==0):
+            self.cas_coin_haut_gauche(x,y)
+        elif (y==self.taille-1):
+            self.cas_coin_haut_droite(x,y)
+        else:
+            self.cas_haut_longueur(x,y)
+
+    def cas_normal (self,x,y):
+        if(self.tableau_jeu[x-1][y-1] != -1):
+            self.tableau_jeu[x-1][y-1] = self.tableau_jeu[x-1][y-1] + 1
+        if(self.tableau_jeu[x-1][y] != -1):
+            self.tableau_jeu[x-1][y] = self.tableau_jeu[x-1][y] + 1
+        if(self.tableau_jeu[x-1][y+1] != -1):
+            self.tableau_jeu[x-1][y+1] = self.tableau_jeu[x-1][y+1] + 1
+        if(self.tableau_jeu[x][y-1] != -1):
+            self.tableau_jeu[x][y-1] = self.tableau_jeu[x][y-1] + 1
+        if(self.tableau_jeu[x][y+1] != -1):
+            self.tableau_jeu[x][y+1] = self.tableau_jeu[x][y+1] + 1
+        if(self.tableau_jeu[x+1][y-1] != -1):
+            self.tableau_jeu[x+1][y-1] = self.tableau_jeu[x+1][y-1] + 1
+        if(self.tableau_jeu[x+1][y] != -1):
+            self.tableau_jeu[x+1][y] = self.tableau_jeu[x+1][y] + 1
+        if(self.tableau_jeu[x+1][y+1] != -1):
+            self.tableau_jeu[x+1][y+1] = self.tableau_jeu[x+1][y+1] + 1
 
 def verification(Tab):
     """
@@ -145,6 +158,7 @@ def verification(Tab):
 
 Reponse = Grille()
 Reponse.affichage()
+print("------------------------------------")
 Reponse.tableau_mine_init()
 Reponse.affichage()
 
