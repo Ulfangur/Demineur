@@ -16,37 +16,65 @@ def Revele(Grille_Reponse,Grille_Joueur,x,y,Joueur):
                         if i==0 and j==0:
                             ne_fais_rien = 0
                         else:
-                            Revele(Grille_Reponse,Grille_Joueur,x+i,y+j)
+                            if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
+                                Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
             elif (y == Grille_Joueur.taille-1):
                 for i in range(2):
                     for j in range(-1,1):
                         if i==0 and j==0:
                             ne_fais_rien = 0
                         else:
-                            Revele(Grille_Reponse,Grille_Joueur,x+i,y+j)
+                            if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
+                                Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
             else:
                 for i in range(0,2):
                     for j in range(-1,2):
                         if i==0 and j==0:
                             ne_fais_rien = 0
                         else:
-                            Revele(Grille_Reponse,Grille_Joueur,x+i,y+j)
+                            if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
+                                Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
         elif (x == Grille_Joueur.taille-1):
             if (y==0):
-                pass
+                for i in range(-1,1):
+                    for j in range(2):
+                        if i==0 and j==0:
+                            ne_fais_rien = 0
+                        else:
+                            if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
+                                Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
             elif(y == Grille_Joueur.taille-1):
-                pass
+                for i in range(-1,1):
+                    for j in range(-1,1):
+                        if i==0 and j==0:
+                            ne_fais_rien = 0
+                        else:
+                            if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
+                                Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
             else:
                 for i in range(-1,1):
                     for j in range(-1,2):
                         if i==0 and j==0:
                             ne_fais_rien = 0
                         else:
-                            Revele(Grille_Reponse,Grille_Joueur,x+i,y+j)
+                            if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
+                                Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
         elif (y==0):
-            pass
+            for i in range(-1,2):
+                for j in range(2):
+                    if i==0 and j==0:
+                        ne_fais_rien = 0
+                    else:
+                        if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
+                            Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
         elif (y == Grille_Joueur.taille-1):
-            pass
+            for i in range(-1,2):
+                for j in range(-1,1):
+                    if i==0 and j==0:
+                        ne_fais_rien = 0
+                    else:
+                        if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
+                            Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
         else:
             for i in range(-1,2,1):
                 for j in range(-1,2,1):
@@ -54,6 +82,6 @@ def Revele(Grille_Reponse,Grille_Joueur,x,y,Joueur):
                         ne_fais_rien = 0
                     else:
                         if Grille_Joueur.tableau_jeu[x+i][y+j] ==".":
-                            Revele(Grille_Reponse,Grille_Joueur,x+i,y+j)
+                            Revele(Grille_Reponse,Grille_Joueur,x+i,y+j,Joueur)
 
             
