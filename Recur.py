@@ -3,9 +3,13 @@ def Revele(Grille_Reponse,Grille_Joueur,x,y,Joueur):
     il faudra changer le Joueur a la fin de son tour en comparant le nombre de bombes avant et après ce programme
     """
     if (Grille_Reponse.tableau_jeu[x][y] != 0):
-        Grille_Joueur.tableau_jeu[x][y] = Grille_Reponse.tableau_jeu[x][y]
         if (Grille_Reponse.tableau_jeu[x][y] == -1):
+            Grille_Joueur.tableau_jeu[x][y] = "B"
             Joueur.bombe()
+            Grille_Reponse.trouve_bombe()
+        else:
+            Grille_Joueur.tableau_jeu[x][y] = Grille_Reponse.tableau_jeu[x][y]
+        
 
     else:
         Grille_Joueur.tableau_jeu[x][y] = Grille_Reponse.tableau_jeu[x][y]

@@ -1,5 +1,9 @@
 from random import randint
-import Class1 as Grille
+import os
+
+from Class1 import Grille
+from Class2 import Joueur
+from Recur import Revele
 def verification(Tab):
     """
     Permet de vérifier si le tableau est bien crée avec 50 bombes.
@@ -15,17 +19,6 @@ def verification(Tab):
                 compteur = compteur + 1
     print(compteur)    
 
-
-Reponse = Grille.Grille()
-print("------------------------------------")
-Reponse.tableau_mine_init()
-Reponse.affichage()
-print("------------------------------------")
-Reponse2 = Grille.Grille()
-#Reponse2.tableau_chargement()
-Reponse2.affichage()
-print("------------------------------------")
-#verification(Test)
 
 def guess(Objet:Grille):
     """
@@ -50,10 +43,82 @@ def guess(Objet:Grille):
     return x,y
 
 def deja_pris(Objet:Grille,x,y):
-    if Objet.tableau_jeu[x][y] == 0:
+    if Objet.tableau_jeu[x][y] == ".":
         return False
     else:
         return True
 
-#temp1,temp2 = guess(Reponse2)
-#print(type(temp1),temp1,type(temp2),temp2)
+def separation():
+    print("-"*100)
+
+def main():
+    choix:int = int(input("Choix du mode : \n -> 0 pour un tableau généré aléatoirement \n -> 1 Pour un tableau venant d'un fichier \n Votre choix : "))
+    if (choix == 0):
+        Tableau_Reponse = Grille()
+        Tableau_Reponse.tableau_mine_init()
+        Tableau_Reponse.affichage()
+        separation()
+        Tableau_Joueur = Grille()
+        Tableau_Joueur.tableau_joueur()
+    elif (choix == 1):
+        Tableau_Reponse = Grille()
+        Tableau_Reponse.tableau_chargement()
+        Tableau_Reponse.affichage()
+        separation()
+        Tableau_Joueur = Grille()
+        Tableau_Joueur.tableau_joueur()
+    else:
+        print("Vous avez mis un choix inexistant. Réessayez.")
+        main()
+        return 1
+    Tableau_Reponse.stockage_tableau()
+    Joueur1 = Joueur()
+    Joueur2 = Joueur()
+    if (randint(0,1) == 1):
+        Joueur1.changement_joueur(Joueur2)
+    else:
+        Joueur2.changement_joueur(Joueur1)
+    
+    while (Tableau_Reponse.bombes != 0) or (Joueur1 < 25) or (Joueur2 < 25):
+        if (Joueur1.tour == True):
+            print("Au joueur 1 de jouer.")
+            temp = Joueur1.score
+            Nb_tour = 0
+            while (temp < Joueur1.score) or (Nb_tour == 0):
+                Tableau_Joueur.affichage()
+                separation()
+                if temp < Joueur1.score :
+                    temp = Joueur1.score
+                    print("Joueur1,encore a toi.")
+                x,y = guess(Tableau_Joueur)
+                Revele(Tableau_Reponse,Tableau_Joueur,x,y,Joueur1)
+                Nb_tour = Nb_tour + 1
+                print(f"Voici les scores: \n->Joueur1 : {Joueur1.score}\n->Joueur2 : {Joueur2.score}")
+            Joueur1.changement_joueur(Joueur2)
+        else:
+            print("Au joueur 2 de jouer.")
+            temp = Joueur2.score
+            Nb_tour = 0
+            while (temp < Joueur2.score) or (Nb_tour == 0):
+                Tableau_Joueur.affichage()
+                separation()
+                if temp < Joueur2.score :
+                    temp = Joueur2.score
+                    print("Joueur 2, encore a toi.")
+                x,y = guess(Tableau_Joueur)
+                Revele(Tableau_Reponse,Tableau_Joueur,x,y,Joueur2)
+                Nb_tour = Nb_tour + 1
+                print(f"Voici les scores: \n->Joueur1 : {Joueur1.score}\n->Joueur2 : {Joueur2.score}")
+            Joueur1.changement_joueur(Joueur2)
+    print("Fin du jeu!\nVoici le gagnant... : ")
+    if (Joueur1.bombe > 25) :
+        print("Victoire du Joueur 1")
+    elif (Joueur2.bombe > 25) :
+        print("Victoire du Joueur 2")
+    else:
+        print("égalité!")
+    #choix = int(input("Voulez vous stocker le Tableau de jeu entier? \1->Oui\n2->Non\nVotre choix : "))
+    #if (choix == 1):
+        #Tableau_Reponse.stockage_tableau()
+    print("Merci d'avoir joué!")
+main()

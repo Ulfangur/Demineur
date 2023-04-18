@@ -7,10 +7,11 @@ class Grille:
         """
         self.taille:int = 16
         self.tableau_jeu:list = [[0 for i in range(self.taille)]for j in range(self.taille)]
+        self.bombes:int = 0
 
     def tableau_joueur(self):
         self.tableau_jeu:list = [["." for i in range(self.taille)]for j in range(self.taille)]
-        
+
     def affichage(self):
         """
         Affichage du tableau de jeu
@@ -46,19 +47,28 @@ class Grille:
             Ligne = Ligne +1
             Colonne = 0
         fic.close()
+        self.bombes=50
     def stockage_tableau(self):
         fic= open("Tableau_jeu.txt","w")
+        for i in range(self.taille):
+            for j in range(self.taille):
+                fic.write(str(self.tableau_jeu[i][j]))
+                fic.write(" ")
+            fic.write("\n")
+        fic.close()
             
+    def trouve_bombe(self):
+        self.bombes = self.bombes - 1
     def tableau_mine_init(self):
         """
         Génération des Bombes
         Génération du nombre de Bombe a un point x y (si ce point ne contient pas de bombe)
         """
-        nombre_bombes:int = 50
+        self.bombes=50
         x:int = 0
         y:int = 0
         unefois:bool = True
-        for i in range(nombre_bombes):
+        for i in range(self.bombes):
             while (self.tableau_jeu[x][y] == -1) or (unefois):
                 x = randint(0,self.taille-1)  
                 y = randint(0,self.taille-1) 
@@ -146,7 +156,7 @@ class Grille:
         elif (y==self.taille-1):
             self.cas_coin_bas_droite(x,y)
         else:
-            self.cas_bas_longueur
+            self.cas_bas_longueur(x,y)
 
     def cas_gauche(self,x:int,y:int):
         if (self.tableau_jeu[x-1][y] != -1):
