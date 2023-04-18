@@ -21,6 +21,10 @@ Reponse.affichage()
 print("------------------------------------")
 Reponse.tableau_mine_init()
 Reponse.affichage()
+#print("------------------------------------")
+#Reponse2 = Grille.Grille()
+#Reponse2.tableau_chargement()
+#Reponse2.affichage()
 
 
 #verification(Test)

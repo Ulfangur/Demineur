@@ -18,6 +18,33 @@ class Grille:
                 chaine = chaine + " " + str(self.tableau_jeu[i][j])
             print(chaine, "\n")
     #Il faudrait ajouter un programme qui charge une map démineur par un fichier.
+
+    def tableau_chargement(self):
+
+        nom_fichier:str = str(input("Comment s'appelle votre fichier? (il doit bien sur être dans le même dossier ) "))
+        fic = open(nom_fichier,"r")
+        lignes = fic.readlines()
+        bombe = False
+        Ligne = 0
+        Colonne = 0 
+        for ligne in lignes : 
+            for e in ligne:
+                if not bombe :
+                    if e != " " and e !="\n":
+                        if e == "-":
+                            self.tableau_jeu[Ligne][Colonne] = -1
+                            bombe = True
+                            Colonne = Colonne + 1
+                        else:
+                            self.tableau_jeu[Ligne][Colonne] = e
+                            Colonne = Colonne + 1
+                else:
+                    bombe = False
+            Ligne = Ligne +1
+            Colonne = 0
+
+                            
+
     def tableau_mine_init(self):
         """
         Génération des Bombes
