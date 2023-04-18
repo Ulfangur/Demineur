@@ -17,16 +17,43 @@ def verification(Tab):
 
 
 Reponse = Grille.Grille()
-Reponse.affichage()
 print("------------------------------------")
 Reponse.tableau_mine_init()
 Reponse.affichage()
-#print("------------------------------------")
-#Reponse2 = Grille.Grille()
+print("------------------------------------")
+Reponse2 = Grille.Grille()
 #Reponse2.tableau_chargement()
-#Reponse2.affichage()
-
-
+Reponse2.affichage()
+print("------------------------------------")
 #verification(Test)
 
+def guess(Objet:Grille):
+    """
+    La grille prise en argument est celle coté joueur.
+    """
+    x:int = 16
+    y:int = 16
+    while (x > 15) or (x < 0):
+        x = int(input("Donnez la Ligne ou vous voulez cliquer (jusqu'à 15):"))
+    while (y > 15) or (y < 0):
+        y = int(input("Donnez la Colonne ou vous voulez cliquer (jusqu'à 15):"))
+    while deja_pris(Objet,x,y):
+        print("Case déjà cliquée")
+        x:int = 16
+        y:int = 16
+        while (x > 15) or (x < 0):
+            x = int(input("Donnez la Ligne ou vous voulez cliquer (jusqu'à 15):"))
+        
+        while (y > 15) or (y < 0):
+            y = int(input("Donnez la Colonne ou vous voulez cliquer (jusqu'à 15):"))
 
+    return x,y
+
+def deja_pris(Objet:Grille,x,y):
+    if Objet.tableau_jeu[x][y] == 0:
+        return False
+    else:
+        return True
+
+#temp1,temp2 = guess(Reponse2)
+#print(type(temp1),temp1,type(temp2),temp2)
