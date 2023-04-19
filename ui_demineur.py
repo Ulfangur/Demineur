@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton
 from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QFont
 from grille_youssef import Demineur
 
 class Minesweeper(QWidget):
@@ -22,10 +23,13 @@ class Minesweeper(QWidget):
         for lignes in range(self.lignes):
             for colonnes in range(self.colonnes):
                 button = QPushButton()
+                button.setFont(QFont('Times', 15))
                 button.setFixedSize(QSize(30, 30))
                 valeur = str(tabgrille[lignes][colonnes])
                 if valeur == "-1":
                     valeur = "*"
+                if valeur == "?":
+                    valeur = " "
                 button.setText(valeur)
                 self.liste_bouton.append(((lignes,colonnes),button))
                 self.layout().addWidget(button, lignes, colonnes)
@@ -54,6 +58,7 @@ class Minesweeper(QWidget):
                         valeur = str(self.grille_visible[tuple_indice[0]][tuple_indice[1]])
                         bouton[1].setText(valeur)
         else:
+            button.setStyleSheet('QPushButton {color: red;}')
             button.setText("*")
         
 
