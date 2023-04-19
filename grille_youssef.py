@@ -84,6 +84,8 @@ class Demineur:
 
         if self.grille[x][y] != -1:
             liste_indice_modifie.append((x, y))
+        else:
+            liste_indice_modifie.append("bombe")
 
         if self.grille[x][y] == 0:
             self.grille_non_visible[x][y] = self.grille[x][y]

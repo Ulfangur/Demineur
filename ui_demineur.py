@@ -47,11 +47,14 @@ class Minesweeper(QWidget):
             if button == elem[1]:
                 pos = elem[0]
         indice_a_modif = self.demineur._cases_revele(pos[0], pos[1])
-        for tuple_indice in indice_a_modif:
-            for bouton in self.liste_bouton:
-                if tuple_indice == bouton[0]:
-                    valeur = str(self.grille_visible[tuple_indice[0]][tuple_indice[1]])
-                    bouton[1].setText(valeur)
+        if indice_a_modif[0] != "bombe":
+            for tuple_indice in indice_a_modif:
+                for bouton in self.liste_bouton:
+                    if tuple_indice == bouton[0]:
+                        valeur = str(self.grille_visible[tuple_indice[0]][tuple_indice[1]])
+                        bouton[1].setText(valeur)
+        else:
+            button.setText("*")
         
 
 
