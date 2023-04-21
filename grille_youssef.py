@@ -1,9 +1,5 @@
 from random import randint
 
-#je l'ai faite pour tester l'interface graphique
-#l'interface graphique depend pour l'instant de cette classe
-#mais c'est changeable
-
 class Demineur:
 
     def __init__(self, ligne=16, colonne=16, bombe=50):
