@@ -106,12 +106,12 @@ class UI_Demineur(QWidget):
     
     def _fin_de_partie(self):
         UI_Demineur._resultat(self)
-        msgBox = QMessageBox()
-        msgBox.setIcon(QMessageBox.Information)
-        msgBox.setText(f"Le gagnant est le joueur {self.J_Gagnant}. Bravo !")
-        msgBox.setWindowTitle("Terminé !")
-        msgBox.setStandardButtons(QMessageBox.Ok)
-        msgBox.exec_()
+        msgFin = QMessageBox()
+        msgFin.setIcon(QMessageBox.Information)
+        msgFin.setText(f"Le gagnant est le joueur {self.J_Gagnant}. Bravo !")
+        msgFin.setWindowTitle("Terminé !")
+        msgFin.setStandardButtons(QMessageBox.Ok)
+        msgFin.exec_()
 
 
     
