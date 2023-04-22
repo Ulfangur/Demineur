@@ -47,8 +47,8 @@ class Demineur:
         bombe_place = 0
 
         while bombe_place != self.bombe:
-            ligne_random = randint(0,15)
-            colonne_random = randint(0,15)
+            ligne_random = randint(0,self.ligne-1)
+            colonne_random = randint(0,self.colonne-1)
             if self.grille[ligne_random][colonne_random] != -1:
                 self.grille[ligne_random][colonne_random] = -1
                 bombe_place += 1
