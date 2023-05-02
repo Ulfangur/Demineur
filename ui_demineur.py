@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, \
     QPushButton, QLabel, QMessageBox, QVBoxLayout, QLayout
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont
-from grille_youssef import Demineur
+from classe_grille import Demineur
 
 class UI_Demineur(QWidget):
     def __init__(self, lignes=16, colonnes=16):
