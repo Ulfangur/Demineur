@@ -8,5 +8,8 @@ Mettre une croix entre les crochets quand c'est fait : https://sqlbak.com/blog/w
 ## Site : 
 - [ ] Faire Infrastructure 
 - [ ] Style Sheet
-- [ ] Lister sur un fichier tout les requis pour le site
-- [ ] .
+- [x] Lister sur un fichier tout les requis pour le site
+* - [ ] Main website
+* - [ ] Page presentation Codeurs
+* - [ ] Page présentation projet
+* - [ ] **???**
