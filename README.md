@@ -9,4 +9,4 @@ Mettre une croix entre les crochets quand c'est fait : https://sqlbak.com/blog/w
 - [ ] Faire Infrastructure 
 - [ ] Style Sheet
 - [ ] Lister sur un fichier tout les requis pour le site
-- [ ] 
+- [ ] .
