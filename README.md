@@ -6,7 +6,13 @@ Mettre une croix entre les crochets quand c'est fait : https://sqlbak.com/blog/w
 - [ ] Lancer le jeu avec la page quand on a pas le module
 - [ ] Mettre documentation sur comment l'installer sur d'autres ordis
 ## Site : 
-- [ ] Faire Infrastructure 
+- [x] Faire Infrastructure 
 - [ ] Style Sheet
-- [ ] Lister sur un fichier tout les requis pour le site
-- [ ] 
+- [x] Lister sur un fichier tout les requis pour le site
+* - [ ] Main website
+* - [ ] Page presentation Codeurs
+* - [ ] Page présentation projet
+* - [ ] **???**
+
+## IA :
+- [ ]
