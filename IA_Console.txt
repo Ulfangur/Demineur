@@ -1,0 +1,10 @@
+L'ia doit Trouver les bombes elle même.
+
+Idées : 
+    -> Aléatoire Si pas d'idées 
+    -> Les bombes a 1.
+
+
+Problèmes que je pourrais rencontrer : 
+    -> Bordures
+    -> Programme long a lancer
