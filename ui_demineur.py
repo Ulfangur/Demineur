@@ -3,6 +3,14 @@ import subprocess
 import pkg_resources
 
 #installe PyQt5 si il n'est pas présent
+required = {'PyQt5'}
+installed = {pkg.key for pkg in pkg_resources.working_set}
+missing = required - installed
+
+if missing:
+    python = sys.executable
+    subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
+
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, \
     QPushButton, QLabel, QMessageBox, QVBoxLayout, QLayout
 from PyQt5.QtCore import QSize
