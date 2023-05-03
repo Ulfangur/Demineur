@@ -4,7 +4,7 @@ def Revele(Grille_Reponse,Grille_Joueur,x,y,Joueur):
     """
     if (Grille_Reponse.tableau_jeu[x][y] != 0):
         if (Grille_Reponse.tableau_jeu[x][y] == -1):
-            Grille_Joueur.tableau_jeu[x][y] = "B    "
+            Grille_Joueur.tableau_jeu[x][y] = "B"
             Joueur.bombe()
             Grille_Reponse.trouve_bombe()
         else:
