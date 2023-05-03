@@ -1,9 +1,13 @@
 import sys
+import subprocess
+import pkg_resources
+
+#installe PyQt5 si il n'est pas présent
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, \
-    QPushButton, QLabel, QMessageBox, QVBoxLayout
+    QPushButton, QLabel, QMessageBox, QVBoxLayout, QLayout
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont
-from grille_youssef import Demineur
+from classe_grille import Demineur
 
 class UI_Demineur(QWidget):
     def __init__(self, lignes=16, colonnes=16):
@@ -34,6 +38,8 @@ class UI_Demineur(QWidget):
 
         tabgrille = self.grille_non_visible
         grille = QGridLayout()
+        grille.setSpacing(4)
+        grille.setSizeConstraint(QLayout.SetFixedSize)
         vbox.addLayout(grille)
         for lignes in range(self.lignes):
             for colonnes in range(self.colonnes):
