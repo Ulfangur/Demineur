@@ -4,6 +4,7 @@ import os
 from Class1 import Grille
 from Class2 import Joueur
 from Recur import Revele
+import IA_console as IA
 def verification(Tab):
     """
     Permet de vérifier si le tableau est bien crée avec 50 bombes.
