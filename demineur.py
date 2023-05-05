@@ -190,9 +190,9 @@ def JoueuretIA(Tableau_Reponse,Tableau_Joueur):
             Profil_IA.changement_joueur(Joueur1)
     print("Fin du jeu!\nVoici le gagnant... : ")
     if (Joueur1.score > 25) :
-        print(f"Victoire du Joueur 1 avec {Joueur1.score} Bombes trouvées\n L'IA en avait {Profil_IA.bombe}")
+        print(f"Victoire du Joueur 1 avec {Joueur1.score} Bombes trouvées.\nL'IA en avait {Profil_IA.score}")
     elif (Profil_IA.score > 25) :
-        print(f"Victoire de l'IA avec {Profil_IA.score} Bombes trouvées\n Le joueur 2 en avait {Joueur1.bombe}")
+        print(f"Victoire de l'IA avec {Profil_IA.score} Bombes trouvées\n Le joueur 2 en avait {Joueur1.score}")
     else:
         print("égalité!")
     #choix = int(input("Voulez vous stocker le Tableau de jeu entier? \1->Oui\n2->Non\nVotre choix : "))

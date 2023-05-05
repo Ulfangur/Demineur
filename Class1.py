@@ -50,7 +50,7 @@ class Grille:
         self.bombes=50
 
     def stockage_tableau(self):
-        fic= open("Tableau_jeu.txt","w")
+        fic = open("Tableau_jeu.txt","w")
         for i in range(self.taille):
             for j in range(self.taille):
                 fic.write(str(self.tableau_jeu[i][j]))
