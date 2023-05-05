@@ -1,5 +1,6 @@
 from random import randint
 import os
+import time
 
 from Class1 import Grille
 from Class2 import Joueur
@@ -44,6 +45,7 @@ def guess(Objet:Grille):
     return x,y
 
 def deja_pris(Objet:Grille,x,y):
+    """voir si la case est prise"""
     if Objet.tableau_jeu[x][y] == ".":
         return False
     else:
@@ -73,14 +75,28 @@ def main():
         main()
         return 1
     Tableau_Reponse.stockage_tableau()
+    mdj(Tableau_Reponse,Tableau_Joueur)
+
+def mdj(Tableau_Reponse,Tableau_Joueur):
+    choix = int(input("Choix de joueurs : \n -> 0 Pour 2 joueurs\n -> 1 Pour Joueur et IA, "))
+    if (choix == 0):
+        DeuxJoueurs(Tableau_Reponse,Tableau_Joueur)
+    elif (choix == 1):
+        JoueuretIA(Tableau_Reponse,Tableau_Joueur)
+    else:
+        print("Vous avez mis un choix inexistant. Réessayez.")
+        mdj(Tableau_Reponse,Tableau_Joueur)
+        return 1
+    
+def DeuxJoueurs(Tableau_Reponse,Tableau_Joueur):
     Joueur1 = Joueur()
     Joueur2 = Joueur()
     if (randint(0,1) == 1):
         Joueur1.changement_joueur(Joueur2)
     else:
         Joueur2.changement_joueur(Joueur1)
-    
-    while (Tableau_Reponse.bombes != 0) or (Joueur1 < 25) or (Joueur2 < 25):
+        
+    while (Tableau_Reponse.bombes != 0) or (Joueur1.score < 25) or (Joueur2.score < 25):
         if (Joueur1.tour == True):
             print("Au joueur 1 de jouer.")
             temp = Joueur1.score
@@ -111,15 +127,61 @@ def main():
                 Nb_tour = Nb_tour + 1
                 print(f"Voici les scores: \n->Joueur1 : {Joueur1.score}\n->Joueur2 : {Joueur2.score}")
             Joueur1.changement_joueur(Joueur2)
-    print("Fin du jeu!\nVoici le gagnant... : ")
-    if (Joueur1.bombe > 25) :
-        print("Victoire du Joueur 1")
-    elif (Joueur2.bombe > 25) :
-        print("Victoire du Joueur 2")
+        print("Fin du jeu!\nVoici le gagnant... : ")
+        if (Joueur1.score > 25) :
+            print("Victoire du Joueur 1")
+        elif (Joueur2.score > 25) :
+            print("Victoire du Joueur 2")
+        else:
+            print("égalité!")
+        #choix = int(input("Voulez vous stocker le Tableau de jeu entier? \1->Oui\n2->Non\nVotre choix : "))
+        #if (choix == 1):
+            #Tableau_Reponse.stockage_tableau()
+        print("Merci d'avoir joué!")
+    
+def JoueuretIA(Tableau_Reponse,Tableau_Joueur):
+    """Programme qui permet de jouer avec notre ia."""
+    Joueur1 = Joueur()
+    Profil_IA = Joueur()
+    Grille_de_IA = IA.Grille_IA()
+    if (randint(0,1) == 1):
+        Joueur1.changement_joueur(Profil_IA)
     else:
-        print("égalité!")
-    #choix = int(input("Voulez vous stocker le Tableau de jeu entier? \1->Oui\n2->Non\nVotre choix : "))
-    #if (choix == 1):
-        #Tableau_Reponse.stockage_tableau()
-    print("Merci d'avoir joué!")
+        Profil_IA.changement_joueur(Joueur1)
+    if (Joueur1.tour == True):
+            print("Au joueur 1 de jouer.")
+            temp = Joueur1.score
+            Nb_tour = 0
+            while (temp < Joueur1.score) or (Nb_tour == 0):
+                Tableau_Joueur.affichage()
+                separation()
+                if temp < Joueur1.score :
+                    temp = Joueur1.score
+                    print("Joueur1,encore a toi.")
+                x,y = guess(Tableau_Joueur)
+                Revele(Tableau_Reponse,Tableau_Joueur,x,y,Joueur1)
+                Nb_tour = Nb_tour + 1
+            print(f"Voici les scores: \n->Joueur1 : {Joueur1.score}\n->IA : {Profil_IA.score}")
+            Joueur1.changement_joueur(Profil_IA)
+    else:
+        print("A l'IA de jouer")
+        temp = Profil_IA.score
+        Nb_tour = 0
+        while (temp < Joueur1.score) or (Nb_tour == 0):
+            Grille_de_IA.Play()
+            Tableau_Joueur.affichage()
+            separation()
+            if temp < Joueur1.score :
+                temp = Joueur1.score
+            if Nb_tour < len(Grille_de_IA.case_a_jouer):
+                x = Grille_de_IA.case_a_jouer[Nb_tour][0]
+                y = Grille_de_IA.case_a_jouer[Nb_tour][1]
+            else:
+                x = Grille_de_IA.case_probas[Nb_tour-len(Grille_de_IA.case_a_jouer)][0]
+                y = Grille_de_IA.case_probas[Nb_tour-len(Grille_de_IA.case_a_jouer)][1]
+            Revele(Tableau_Reponse,Tableau_Joueur,x,y,Profil_IA)
+            Nb_tour = Nb_tour + 1
+        print(f"Voici les scores: \n->Joueur1 : {Joueur1.score}\n->IA : {Profil_IA.score}")
+        Profil_IA.changement_joueur(Joueur1)
+
 main()

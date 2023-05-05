@@ -10,7 +10,7 @@ class Fraction:
         self.denominateur = self.denominateur * other.denominateur
         self.reduire()
     def reduire(self):
-        pgcd = math.gcd(self.numerateur,self.denominateur)
+        pgcd = math.gcd(int(self.numerateur),int(self.denominateur))
         self.numerateur = self.numerateur / pgcd
         self.denominateur = self.denominateur / pgcd
     def multiplier(self,other):
@@ -23,12 +23,31 @@ class Fraction:
         self.multiplier(Temp)
     def flottant(self):
         return self.numerateur / self.denominateur
+    def affichage(self):
+        print(self.numerateur," / ", self.denominateur)
 
 class Grille_IA(Grille):
     def __init__(self):
-        self.tableau_joueur()
+        """Case a jouer sont les cas vrai a 100% (Normalement)
+        Case Probas sont les cas Moins sur, mais il sont sous la forme suivante : (x,y,probabilité)"""
+        self.taille:int = 16
+        self.tableau_jeu:list = [[0 for i in range(self.taille)]for j in range(self.taille)]
+        self.bombes:int = 0
         self.case_a_jouer = []
         self.case_probas = []
+        self.tableau_joueur()
+    
+    def case_a_jouer_affichage(self):
+        i = 0
+        for e in self.case_a_jouer:
+            print(i,e)
+            i = i + 1
+    def case_proba_affichage(self):
+        i = 0
+        for e in self.case_probas:
+            print(i,e)
+            i = i + 1
+
 
     def update(self,other):
         """Other doit être la grille vu par les joueurs."""
@@ -36,7 +55,7 @@ class Grille_IA(Grille):
             for j in range(16):
                 if (other.tableau_jeu[i][j] != ".") and (self.tableau_jeu[i][j] == "." or self.tableau_jeu[i][j] == "\\") :
                     self.tableau_jeu[i][j] = other.tableau_jeu[i][j]
-        self.affichage()
+        self.autour()
     
     def autour(self):
         voisin = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,1),(1,0)]
@@ -74,24 +93,29 @@ class Grille_IA(Grille):
 
     def probas(self,a,b,nb_bombes_reste):
         """(Appliqué si on a pas le nombre précis)
-            Programme : Donne un couple (x,y,probabilité,nombre de bombes ) pour chacun des cas de vide."""  
+            Programme : Donne un couple (x,y,probabilité,nombre de bombes,nombre de cases vide) pour chacun des cas de vide."""  
         voisin = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,1),(1,0)]
+        nombre_case_vide = 0
         for x,y in voisin:
             if ((a + x < 16 and a + x > -1) and (b + y < 16 and b + y > -1)):
                 if (self.tableau_jeu[a + x][b + y] == "."):
-                    Temp = Fraction(1,nb_bombes_reste)
-                    self.case_probas.append((a+x,b+y,Temp,nb_bombes_reste))  
+                    nombre_case_vide = nombre_case_vide + 1
+        for x,y in voisin:
+            if ((a + x < 16 and a + x > -1) and (b + y < 16 and b + y > -1)):
+                if (self.tableau_jeu[a + x][b + y] == "."):
+                    Temp = Fraction(nb_bombes_reste,nombre_case_vide)
+                    self.case_probas.append((a+x,b+y,Temp,nb_bombes_reste,nombre_case_vide))  
 
     def reduction_probas(self):
         """
         On utilise case_probas réduire les paires.
         chaque tuple est de la forme suivante:
-        ( Coordonnées I, Coordonnées J, Fraction de probabilité de type Fraction,Nb_de bombes )
+        ( Coordonnées I, Coordonnées J, Fraction de probabilité de type Fraction,Nb_de bombes,nombre de cases vide )
         Après le programme, chaque Tuple sera de cette forme : 
         ( Coordonnées I, Coordonnées J, Fraction de probabilité de type Fraction,nombre de cases qui ammènent vers cet endroit)
         """
         # D'abord un tri par coordonnées x :
-        self.tri_proba()
+        self.tri_coord()
         Tableau = []
         #Dans_Tableau vérifie si les coordonnées sont déja dans le tableau ou pas, si True alors elles y sont deja
         Dans_Tableau = False
@@ -105,14 +129,16 @@ class Grille_IA(Grille):
                 paires = (self.case_probas[i][0],self.case_probas[i][1],self.case_probas[i][2],1)
                 Tableau.append(paires)
             else:
-                Tableau[Dans][3] = Tableau[Dans][3] + 1
+                paires = (self.case_probas[i][0],self.case_probas[i][1],self.case_probas[i][2],1)
                 Tableau[Dans][2].addition(self.case_probas[i][2])
+                Nouveau = (Tableau[Dans][0],Tableau[Dans][1],Tableau[Dans][2],Tableau[Dans][3]+1)
+                Tableau[Dans] = Nouveau
+        self.case_probas = Tableau
         #Calcul Probas et tri en fonction des probas:
         for e in Tableau :
             e[2].diviser(e[3])
         self.tri_fonction_probas()
                 
-        
     def tri_fonction_probas(self):
         """Tri en fonction des probas
             Chaque tuple est de la forme (proba, indice dans le tableau case_probas)
@@ -135,21 +161,21 @@ class Grille_IA(Grille):
                 if Tableau[maxi][0] < Tableau[j][0]:
                     maxi = j
             # Minimum
-            temp = Tableau[i][0]
-            Tableau[i][0] = Tableau[mini][0]
-            Tableau[mini][0] = temp
+            temp = Tableau[maxi]
+            Tableau[maxi] = Tableau[i]
+            Tableau[i] = temp
             # Maximum 
-            temp = Tableau[maxi][0]
-            Tableau[maxi][0] = Tableau[max_i][0]
-            Tableau[max_i][0] = temp
+            temp = Tableau[max_i]
+            Tableau[max_i] = Tableau[mini]
+            Tableau[mini] = temp
         #Changement du sens du tableau, on en recréer un pour le remplacer ensuite : 
 
         Tableau_final = []
         for i in range(len(Tableau)):
             Tableau_final.append(self.case_probas[Tableau[i][1]])
         self.case_probas = Tableau_final
-
-    def tri_proba(self):
+            
+    def tri_coord(self):
         """Tri en fonction des Coordonées"""
         for i in range(len(self.case_probas)//2):
             maxi = len(self.case_probas) - i - 1
@@ -162,13 +188,13 @@ class Grille_IA(Grille):
                 if self.case_probas[maxi][0] < self.case_probas[j][0]:
                     maxi = j
             # Minimum
-            temp = self.case_probas[i][0]
-            self.case_probas[i][0] = self.case_probas[mini][0]
-            self.case_probas[mini][0] = temp
+            temp = self.case_probas[i]
+            self.case_probas[i] = self.case_probas[mini]
+            self.case_probas[mini] = temp
             # Maximum 
-            temp = self.case_probas[maxi][0]
-            self.case_probas[maxi][0] = self.case_probas[max_i][0]
-            self.case_probas[max_i][0] = temp
+            temp = self.case_probas[maxi]
+            self.case_probas[maxi] = self.case_probas[max_i]
+            self.case_probas[max_i] = temp
 
     def coord_vide(self,a,b):
         """(Appliqué si Le nombre de case vide est le même que le nombre restant de bombes a un point x y)
@@ -198,4 +224,30 @@ class Grille_IA(Grille):
         return compteur
     
     def Play(self):
-        
+        self.update()
+        self.jouer()
+
+
+if __name__ == "__main__":
+    Test = Grille_IA()
+    Test.tableau_jeu = [[0, 0, 0, 0, 0, 1, ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 1, 1, 1, 0, 1, 2, ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 1, ".", 2, 1, 0, 1, 1, 1, ".", ".", ".", ".", ".", ".", "."],
+                        [0, 2, ".", ".", 1, 0, 0, 0, 1, ".", ".", ".", ".", ".", ".", "."],
+                        [0, 1, ".", ".", 2, 1, 0, 0, 2, ".", ".", ".", ".", ".", ".", "."],
+                        [0, 1, 1, ".", ".", 2, 0, 1, 4, ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 1, ".", ".", 2, 0, 1, ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 1, ".", ".", 2, 0, 1, ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 1, 2, ".", 3, 2, 1, ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 0, 1, ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 0, 1, ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 1, 2, ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 2, ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 3, ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 2, ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [0, 0, 1, ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."]]
+    Test.jouer()
+    print(f"Voici les tableaux : \n Pour les cas sur : ")
+    Test.case_a_jouer_affichage()
+    print("et maintenant les cas moins sur : ")
+    Test.case_proba_affichage()

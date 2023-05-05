@@ -1,0 +1,42 @@
+⚠ = Problème rencontré
+
+Classe Grille_IA : 
+	Enfant de Grille (pour tout récuperer des fonctions)
+	
+	Update -> autour -> voisin 
+		•Liés par hyérarchie
+		
+		
+	Jouer -> coord_vide 
+		•Lié Hyérarchie
+		Modifie Case_a_jouer
+		
+		⚠ Renvoie Bien Les Possibilités de jeu, mais certaines sont en double ⚠
+		
+	Jouer -> probas
+		•Lié Hyérarchie
+		Modifie case_probas :
+			exemple : (0, 6, <__main__.Fraction object at 0x0000026D8630E130>, 2, 3) 
+						\  \    /                  							   /  /  
+						 | |   |				     -----------------------  /  /
+						 | |   |                    /                      /----/
+						(x,y,Fraction,nombre de bombes, nombres de cases dispo)
+		
+	Jouer ->reduction_probas
+		⚠ A ce moment la le programme pose problème : 
+			Nouveau = (Tableau[Dans][0],Tableau[Dans][1],Tableau[Dans][2].addition(self.case_probas[i][2]),Tableau[Dans][3]+1)
+			AttributeError: 'NoneType' object has no attribute 'addition'
+		⚠ PROBLEME REGLE : FONCTION OBJET QUI RENVOIS RIEN, UTILISE DANS CREATION VARIABLE
+		
+		reduction_probas -> tri_coord :
+			•Hyérarchie
+			Ne pose aucun problème
+		
+		reduction_probas ->tri_fonction_proba :
+			•Hyérarchie
+			⚠Inversement, le sens doit être i = 0 : Plus grand flottant, i au max : plus petit flottant⚠
+				RESOLU
+	
+	
+	
+	
