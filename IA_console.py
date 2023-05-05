@@ -1,5 +1,7 @@
 from Class1 import Grille
 import math
+from random import randint
+
 class Fraction:
     def __init__(self,x,y):
         self.numerateur = x
@@ -45,7 +47,8 @@ class Grille_IA(Grille):
     def case_proba_affichage(self):
         i = 0
         for e in self.case_probas:
-            print(i,e)
+            Paires = (e[0],e[1],e[2].flottant(),e[3])
+            print(i,Paires)
             i = i + 1
 
 
@@ -62,10 +65,11 @@ class Grille_IA(Grille):
         for i in range(16):
             for j in range(16):
                 value = self.tableau_jeu[i][j]
-                if ((value != "." or value != "\\") or value != "B"):
+                if ((value != "." and value != "\\") and value != "B"):
                     for x,y in voisin:
                         if ((i + x < 16 and i + x > -1) and (j + y < 16 and j + y > -1)):
                             if self.tableau_jeu[i + x][j + y] == "B":
+                                #print(value, type(value), "cas avant le drame")
                                 value = value -1
                     if value == 0:
                         self.voisins(i,j)
@@ -78,11 +82,15 @@ class Grille_IA(Grille):
                     self.tableau_jeu[a + x][b + y] = "\\"
     
     def jouer(self):
+        self.case_a_jouer = []
+        self.case_probas = []
+        self.affichage()
         for i in range(16):
             for j in range(16):
-                if ((self.tableau_jeu[i][j] != 0) and (self.tableau_jeu[i][j] != ".")) : 
+                if ((self.tableau_jeu[i][j] != 0) and (self.tableau_jeu[i][j] != "." and (self.tableau_jeu[i][j] != "B") and (self.tableau_jeu[i][j] != "\\"))) : 
                     nb_case_vide = self.nombre_vide(i,j)
                     nb_bombes = self.nombre_bombes(i,j)
+                    #print(self.tableau_jeu[i][j], type(self.tableau_jeu[i][j]), " ||| ", nb_bombes, type(nb_bombes), " Avant Bombes restantes")
                     bombes_restantes = self.tableau_jeu[i][j]- nb_bombes
                     if (bombes_restantes == nb_case_vide) :
                         self.coord_vide(i,j)
@@ -90,6 +98,23 @@ class Grille_IA(Grille):
                         self.probas(i,j,bombes_restantes)
         #Réduction du tableaux de probas :
         self.reduction_probas()
+        pas_fiable = False
+        if (len(self.case_a_jouer)==0):
+            if (len(self.case_probas) != 0):
+                if self.case_probas[1][2].flottant() < 0.4 :
+                    pas_fiable = True
+        if (((len(self.case_a_jouer) == len(self.case_probas))and len(self.case_probas)==0) or pas_fiable):
+            booleen = True
+            while booleen:
+                x = randint(0,15)
+                y = randint(0,15)
+                if (self.tableau_jeu[x][y] == "."):
+                    booleen = False
+                    self.case_a_jouer = [(x,y)]
+        print("Case a jouer: ")
+        self.case_a_jouer_affichage()
+        print("Case Probas : ")
+        self.case_proba_affichage()
 
     def probas(self,a,b,nb_bombes_reste):
         """(Appliqué si on a pas le nombre précis)
@@ -133,10 +158,11 @@ class Grille_IA(Grille):
                 Tableau[Dans][2].addition(self.case_probas[i][2])
                 Nouveau = (Tableau[Dans][0],Tableau[Dans][1],Tableau[Dans][2],Tableau[Dans][3]+1)
                 Tableau[Dans] = Nouveau
-        self.case_probas = Tableau
+        
         #Calcul Probas et tri en fonction des probas:
         for e in Tableau :
             e[2].diviser(e[3])
+        self.case_probas = Tableau
         self.tri_fonction_probas()
                 
     def tri_fonction_probas(self):
@@ -169,7 +195,6 @@ class Grille_IA(Grille):
             Tableau[max_i] = Tableau[mini]
             Tableau[mini] = temp
         #Changement du sens du tableau, on en recréer un pour le remplacer ensuite : 
-
         Tableau_final = []
         for i in range(len(Tableau)):
             Tableau_final.append(self.case_probas[Tableau[i][1]])
@@ -203,7 +228,15 @@ class Grille_IA(Grille):
         for x,y in voisin:
             if ((a + x < 16 and a + x > -1) and (b + y < 16 and b + y > -1)):
                 if (self.tableau_jeu[a + x][b + y] == "."):
-                    self.case_a_jouer.append((a+x,b+y))
+                    if len(self.case_a_jouer) != 0:
+                        bool = True
+                        for e in self.case_a_jouer:
+                            if e == (a+x,b+y):
+                                bool = False
+                        if bool :
+                            self.case_a_jouer.append((a+x,b+y))
+                    else:
+                        self.case_a_jouer.append((a+x,b+y))
 
     def nombre_vide(self,a,b):
         voisin = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,1),(1,0)]
@@ -223,8 +256,8 @@ class Grille_IA(Grille):
                     compteur = compteur + 1
         return compteur
     
-    def Play(self):
-        self.update()
+    def Play(self,other):
+        self.update(other)
         self.jouer()
 
 

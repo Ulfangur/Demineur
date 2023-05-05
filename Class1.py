@@ -48,6 +48,7 @@ class Grille:
             Colonne = 0
         fic.close()
         self.bombes=50
+
     def stockage_tableau(self):
         fic= open("Tableau_jeu.txt","w")
         for i in range(self.taille):
@@ -56,6 +57,7 @@ class Grille:
                 fic.write(" ")
             fic.write("\n")
         fic.close()
+        print("Enregistrement du fichier fait.")
             
     def trouve_bombe(self):
         self.bombes = self.bombes - 1
