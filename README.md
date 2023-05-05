@@ -5,6 +5,7 @@ Mettre une croix entre les crochets quand c'est fait : https://sqlbak.com/blog/w
 ## Problèmes rencontrés : 
 - [x] Lancer le jeu avec la page quand on a pas le module
 - [ ] ~ Mettre documentation sur comment l'installer sur d'autres ordis
+- [ ] Demander a propos de la fonction guess, sur comment doit-elle fonctionner pour l'ia du prof
 ## Site : 
 - [x] Faire Infrastructure 
 - [ ] Style Sheet
