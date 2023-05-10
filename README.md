@@ -14,3 +14,7 @@ Mettre une croix entre les crochets quand c'est fait : https://sqlbak.com/blog/w
 * - [ ] Page presentation Codeurs
 * - [ ] Page présentation projet
 * - [ ] **???**
+
+## IA : 
+ - [ ] La faire jouer contre elle même et voir qui gagne 
+ * - [ ] Programme pour jouer 100x, 1000x 
