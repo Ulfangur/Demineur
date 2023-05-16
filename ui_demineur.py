@@ -31,6 +31,8 @@ class UI_Demineur(QWidget):
         self.tour = 1 # le joueur 1 par défaut commence
         self.J_Gagnant = None
         self.initUI()
+        
+        
 
     def initUI(self):
         self.setWindowTitle('Démineur')
@@ -38,7 +40,7 @@ class UI_Demineur(QWidget):
         self.setLayout(vbox)
         self.score_j1_label = QLabel(f"Score Joueur 1 : {self.joueur1}")
         self.score_j2_label = QLabel(f"Score Joueur 2 : {self.joueur2}")
-        self.tour_label = QLabel(f"Tour du joueur {self.tour}")
+        self.tour_label = QLabel(f"Tour du joueur 1 (Rouge)")
         vbox.addWidget(self.score_j1_label)
         vbox.addWidget(self.score_j2_label)
         vbox.addWidget(self.tour_label)
@@ -54,13 +56,14 @@ class UI_Demineur(QWidget):
                 button = QPushButton()
                 button.setFont(QFont('Times', 15))
                 button.setFixedSize(QSize(30, 30))
+                
                 valeur = str(tabgrille[lignes][colonnes])
                 if valeur == "-1":
                     valeur = "*"
                 if valeur == "?":
                     valeur = " "
                 button.setText(valeur)
-                self.liste_bouton.append(((lignes,colonnes),button))
+                self.liste_bouton.append(((lignes,colonnes),button)) #liste pour retrouver les boutons par ses coord.
                 grille.addWidget(button, lignes, colonnes)
         
         for button in self.liste_bouton:
@@ -68,13 +71,14 @@ class UI_Demineur(QWidget):
 
         self.show()
     
-    def on_button_clicked(self):
+    def on_button_clicked(self, button=False):
         """
         Action quand on clique sur un bouton
         """
-        button = self.sender()
+        if not button:
+            button = self.sender()
         indice_a_modif = []
-        pos:tuple
+        pos:tuple #tuple des coordonnées (x,y)
         for elem in self.liste_bouton:
             if button == elem[1]:
                 pos = elem[0]
@@ -82,10 +86,11 @@ class UI_Demineur(QWidget):
         if indice_a_modif[0] != "bombe":
 
             if self.tour == 1 and button.text() == " ":
-                self.tour_label.setText("Tour du Joueur 2")
+                self.tour_label.setText("Tour du Joueur 2 (Bleu)")
                 self.tour = 2
+                self._tour_de_ia()
             elif self.tour == 2 and button.text() == " ":
-                self.tour_label.setText("Tour du Joueur 1")
+                self.tour_label.setText("Tour du Joueur 1 (Rouge)")
                 self.tour = 1
                 
             for tuple_indice in indice_a_modif:
@@ -97,15 +102,18 @@ class UI_Demineur(QWidget):
             if self.tour == 1 and button.text() != "*":
                 self.joueur1 += 1
                 self.score_j1_label.setText(f"Score Joueur 1 : {self.joueur1}")
+                button.setStyleSheet('QPushButton {color: red;}')
             elif self.tour == 2 and button.text() != "*":
                 self.joueur2 += 1
                 self.score_j2_label.setText(f"Score Joueur 2 : {self.joueur2}")
+                button.setStyleSheet('QPushButton {color: blue;}')
+                self._tour_de_ia()
 
-            button.setStyleSheet('QPushButton {color: red;}')
             button.setText("*")
 
         if UI_Demineur._est_fini(self):
             UI_Demineur._fin_de_partie(self)
+            
         
     def _est_fini(self):
         return self.joueur1 + self.joueur2 == self.demineur.bombe #si toutes les mines ont été trouvé 
@@ -129,6 +137,19 @@ class UI_Demineur(QWidget):
         msgFin.setWindowTitle("Terminé !")
         msgFin.setStandardButtons(QMessageBox.Ok)
         msgFin.exec_()
+    
+    def _tour_de_ia(self):
+        indice_ia = self.demineur._prochaine_case_a_reveler()
+        self._test_clic_ia(indice_ia)
+
+    def _test_clic_ia(self, coord):
+        for i in range(len(self.liste_bouton)):
+            if self.liste_bouton[i][0] == coord:
+                bouton = self.liste_bouton[i][1]
+        self.on_button_clicked(bouton)
+        
+
+
 
 
     

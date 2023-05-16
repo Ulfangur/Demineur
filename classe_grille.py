@@ -1,5 +1,5 @@
 from random import randint
-
+import numpy as np
 class Demineur:
 
     def __init__(self, ligne=16, colonne=16, bombe=50):
@@ -103,15 +103,81 @@ class Demineur:
             
         return liste_indice_modifie
     
+    def _cases_a_verifier(self):
+        liste_indice = []
+        for i in range(self.ligne):
+            for j in range(self.colonne):
+                if self.grille_non_visible[i][j] not in ["?", 0, -1]:
+                    liste_indice.append((i, j))
+        return liste_indice
+    
+    def _get_cases_voisins(self, x, y):
+        liste_indice = []
+        for dx, dy in ((-1,-1),(-1, 0),(-1, 1),(0,-1),(0,1),(1,-1),(1,0),(1,1)):
+            new_x, new_y = dx + x, dy + y
+            if 0 <= new_x < self.ligne and 0 <= new_y < self.colonne:
+                liste_indice.append((new_x, new_y))
+        return liste_indice
+    
+    def _contraintes(self):
+        indices = self._cases_a_verifier()
+        liste_contraintes = []
+        nb_bombes:int
+        for x, y in indices:
+            indices_voisin = self._get_cases_voisins(x, y)
+            nb_bombes = 0
+            cases_nn_revele = []
+            for dx, dy in indices_voisin:
+                if self.grille_non_visible[dx][dy] == -1:
+                    nb_bombes += 1
+                elif self.grille_non_visible[dx][dy] == "?":
+                    cases_nn_revele.append((dx,dy))
+            if self.grille_non_visible[x][y] > nb_bombes:
+                mines_restantes = nb_bombes - self.grille_non_visible[x][y]
+                contrainte:set = (cases_nn_revele, mines_restantes)
+                liste_contraintes.append(contrainte)
+        return liste_contraintes
+    
+    def _intersection(self, contraintes):
+        new_liste_c = []
+        for i in range(len(contraintes)):
+            for j in range(i + 1, len(contraintes)):
+                cases_communs = contraintes[i][0].intersection(contraintes[j][0])
+                if cases_communs:
+                    mine_restante = abs(contraintes[i][1] - contraintes[j][1])
+                    n_contrainte = (cases_communs, mine_restante)
+                    new_liste_c.append(n_contrainte)
+        return new_liste_c
+
+
+    def _probabilite(self, contraintes):
+        probabilite = {}
+        for cases, mines in contraintes:
+            for case in cases:
+                prob = mines / len(cases)
+                if case not in probabilite or prob > probabilite[case]:
+                    probabilite[case] = prob
+        return probabilite
+    
+    def _case_plus_probable(self):
+        pass
+
 
 
 if __name__ == '__main__':
+    
     grille_test = Demineur()
     print(grille_test._cases_revele(3,7))
     print("grille normal : \n")
     grille_test._affichage("non visible")
-    print("grille visible")
+    print("grille visible\n")
     grille_test._affichage()
-
+    print("autour\n")
+    print(grille_test._get_cases_voisins(3, 7))
+    print("indice a verifier\n")
+    print(grille_test._cases_a_verifier())
+    print("?? : \n")
+    print(grille_test._contraintes())
+    
 
 
