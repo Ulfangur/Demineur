@@ -139,7 +139,7 @@ class UI_Demineur(QWidget):
         msgFin.exec_()
     
     def _tour_de_ia(self):
-        indice_ia = self.demineur._case_plus_probable()
+        indice_ia = self.demineur.case_plus_probable()
         self._test_clic_ia(indice_ia)
 
     def _test_clic_ia(self, coord):
