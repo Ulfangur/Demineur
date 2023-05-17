@@ -168,7 +168,7 @@ class Demineur:
         if probabilites:
             plus_probable = max(probabilites, key=probabilites.get)
         else:
-            plus_probable = (randint(0, self.ligne), randint(0, self.colonne))
+            plus_probable = (randint(0, self.ligne-1), randint(0, self.colonne-1))
         return plus_probable
 
 

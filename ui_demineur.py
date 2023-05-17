@@ -1,7 +1,7 @@
 import sys
 import subprocess
 import pkg_resources
-
+import time 
 #installe PyQt5 si il n'est pas présent
 required = {'PyQt5'}
 installed = {pkg.key for pkg in pkg_resources.working_set}
@@ -143,9 +143,16 @@ class UI_Demineur(QWidget):
         self._test_clic_ia(indice_ia)
 
     def _test_clic_ia(self, coord):
+        temp = -1
         for i in range(len(self.liste_bouton)):
             if self.liste_bouton[i][0] == coord:
                 bouton = self.liste_bouton[i][1]
+                temp = i
+        if temp == -1 :
+                print("probleme")
+                print(coord)
+        else:
+            print(self.liste_bouton[temp][1])
         self.on_button_clicked(bouton)
             
 
