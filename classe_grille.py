@@ -161,7 +161,7 @@ class Demineur:
                     probabilite[case] = prob
         return probabilite
     
-    def _case_plus_probable(self):
+    def case_plus_probable(self):
         contraintes = self._contraintes()
         contraintes += self._intersection(contraintes)
         probabilites = self._probabilite(contraintes)
@@ -186,7 +186,7 @@ if __name__ == '__main__':
     print("indice a verifier\n")
     print(grille_test._cases_a_verifier())
     print("?? : \n")
-    print(grille_test._case_plus_probable())
+    print(grille_test.case_plus_probable())
     
 
 
