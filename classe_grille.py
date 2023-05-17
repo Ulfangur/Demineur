@@ -103,6 +103,7 @@ class Demineur:
             
         return liste_indice_modifie
     
+    
     def _cases_a_verifier(self):
         liste_indice = []
         for i in range(self.ligne):
@@ -142,7 +143,8 @@ class Demineur:
         new_liste_c = []
         for i in range(len(contraintes)):
             for j in range(i + 1, len(contraintes)):
-                cases_communs = contraintes[i][0].intersection(contraintes[j][0])
+                print(contraintes[i][0], " et ", contraintes[j][0])
+                cases_communs = set(contraintes[i][0]).intersection(set(contraintes[j][0]))
                 if cases_communs:
                     mine_restante = abs(contraintes[i][1] - contraintes[j][1])
                     n_contrainte = (cases_communs, mine_restante)
@@ -160,7 +162,14 @@ class Demineur:
         return probabilite
     
     def _case_plus_probable(self):
-        pass
+        contraintes = self._contraintes()
+        contraintes += self._intersection(contraintes)
+        probabilites = self._probabilite(contraintes)
+        if probabilites:
+            plus_probable = max(probabilites, key=probabilites.get)
+        else:
+            plus_probable = (randint(0, self.ligne), randint(0, self.colonne))
+        return plus_probable
 
 
 
@@ -177,7 +186,7 @@ if __name__ == '__main__':
     print("indice a verifier\n")
     print(grille_test._cases_a_verifier())
     print("?? : \n")
-    print(grille_test._contraintes())
+    print(grille_test._case_plus_probable())
     
 
 
