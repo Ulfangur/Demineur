@@ -45,16 +45,23 @@ def guess(Objet:Grille):
     return x,y
 
 def deja_pris(Objet:Grille,x,y):
-    """voir si la case est prise"""
+    """voir si la case est prise
+    Objet : Grille coté joueur
+    
+    Return booléen"""
     if Objet.tableau_jeu[x][y] == ".":
         return False
     else:
         return True
 
 def separation():
+    """séparation dans la console"""
     print("-"*100)
 
 def main():
+    """
+    Lancement du Programme principal.
+    """
     choix:int = int(input("Choix du mode : \n -> 0 pour un tableau généré aléatoirement \n -> 1 Pour un tableau venant d'un fichier \n Votre choix : "))
     if (choix == 0):
         Tableau_Reponse = Grille()
@@ -89,7 +96,6 @@ def mdj(Tableau_Reponse,Tableau_Joueur):
         return 1
     
 def DeuxJoueurs(Tableau_Reponse,Tableau_Joueur):
-    Tableau_Reponse.stockage_tableau()
     Joueur1 = Joueur()
     Joueur2 = Joueur()
     if (randint(0,1) == 1):
@@ -128,6 +134,7 @@ def DeuxJoueurs(Tableau_Reponse,Tableau_Joueur):
                 Nb_tour = Nb_tour + 1
                 print(f"Voici les scores: \n->Joueur1 : {Joueur1.score}\n->Joueur2 : {Joueur2.score}")
             Joueur1.changement_joueur(Joueur2)
+        
         print("Fin du jeu!\nVoici le gagnant... : ")
         if (Joueur1.score > 25) :
             print("Victoire du Joueur 1")
@@ -142,7 +149,6 @@ def DeuxJoueurs(Tableau_Reponse,Tableau_Joueur):
     
 def JoueuretIA(Tableau_Reponse,Tableau_Joueur):
     """Programme qui permet de jouer avec notre ia."""
-    Tableau_Reponse.stockage_tableau()
     Joueur1 = Joueur()
     Profil_IA = Joueur()
     Grille_de_IA = IA.Grille_IA()
