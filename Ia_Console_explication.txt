@@ -30,11 +30,12 @@ Classe Grille_IA :
 		
 		reduction_probas -> tri_coord :
 			•Hyérarchie
-			Ne pose aucun problème
+			Ne pose aucun problème : 
+                ⚠ Pose problème sur les ordis de l'université; Fichier non-enregistré sur git? ⚠
 		
 		reduction_probas ->tri_fonction_proba :
 			•Hyérarchie
-			⚠Inversement, le sens doit être i = 0 : Plus grand flottant, i au max : plus petit flottant⚠
+			⚠ Inversement, le sens doit être i = 0 : Plus grand flottant, i au max : plus petit flottant ⚠
 				RESOLU
 	
 	

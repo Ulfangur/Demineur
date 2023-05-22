@@ -1,4 +1,5 @@
 from random import randint
+from pprint import pprint
 
 class Demineur:
 
@@ -103,15 +104,111 @@ class Demineur:
             
         return liste_indice_modifie
     
+    
+    def _cases_a_verifier(self):
+        liste_indice = []
+        for i in range(self.ligne):
+            for j in range(self.colonne):
+                if self.grille_non_visible[i][j] not in ["?", 0, -1]:
+                    liste_indice.append((i, j))
+        return liste_indice
+    
+    def _get_cases_voisins(self, x, y):
+        liste_indice = []
+        for dx, dy in ((-1,-1),(-1, 0),(-1, 1),(0,-1),(0,1),(1,-1),(1,0),(1,1)):
+            new_x, new_y = dx + x, dy + y
+            if 0 <= new_x < self.ligne and 0 <= new_y < self.colonne:
+                liste_indice.append((new_x, new_y))
+        return liste_indice
+    
+    def _contraintes(self):
+        indices = self._cases_a_verifier()
+        liste_contraintes = []
+        nb_bombes:int
+        
+        for x, y in indices:
+            indices_voisin = self._get_cases_voisins(x, y)
+            nb_bombes = 0
+            cases_nn_revele = []
+            for dx, dy in indices_voisin:
+                if self.grille_non_visible[dx][dy] == -1:
+                    nb_bombes += 1
+                elif self.grille_non_visible[dx][dy] == "?":
+                    cases_nn_revele.append((dx,dy))
+            if self.grille_non_visible[x][y] > nb_bombes:
+                mines_restantes = nb_bombes - self.grille_non_visible[x][y]
+                contrainte:set = (set(cases_nn_revele), mines_restantes)
+                liste_contraintes.append(contrainte)
+            
+        i = 0
+        while i < len(liste_contraintes):
+            j = i + 1
+            while j < len(liste_contraintes):
+                cases_i, mines_i = liste_contraintes[i]
+                cases_j, mines_j = liste_contraintes[j]
+                if cases_j.issubset(cases_i):
+                    cases_diff = cases_i - cases_j
+                    if len(cases_diff) > 0:
+                        liste_contraintes[i] = (cases_diff, mines_i - mines_j)
+                elif cases_i.issubset(cases_j):
+                    cases_diff = cases_j - cases_i
+                    if len(cases_diff) > 0:
+                        liste_contraintes[j] = (cases_diff, mines_j - mines_i)
+                j += 1
+            i += 1
+
+        return liste_contraintes
+    
+    def _intersection(self, contraintes):
+        new_liste_c = []
+        for i in range(len(contraintes)):
+            for j in range(i + 1, len(contraintes)):
+                cases_communs = set(contraintes[i][0]).intersection(set(contraintes[j][0]))
+                if cases_communs:
+                    mine_restante = abs(contraintes[i][1] - contraintes[j][1])
+                    n_contrainte = (cases_communs, mine_restante)
+                    new_liste_c.append(n_contrainte)
+        return new_liste_c
+
+
+    def _probabilite(self, contraintes):
+        probabilite = {}
+        for cases, mines in contraintes:
+            for case in cases:
+                prob = mines / len(cases)
+                if case not in probabilite or prob > probabilite[case]:
+                    probabilite[case] = abs(prob)
+        return probabilite
+    
+    def _case_plus_probable(self):
+        contraintes = self._contraintes()
+        contraintes += self._intersection(contraintes)
+        probabilites = self._probabilite(contraintes)
+        #print("Probabilité :\n")
+        #pprint(probabilites)
+        if probabilites:
+            plus_probable = max(probabilites, key=probabilites.get)
+        else:
+            plus_probable = (randint(0, self.ligne-1), randint(0, self.colonne-1))
+        return plus_probable
+
 
 
 if __name__ == '__main__':
+    
     grille_test = Demineur()
     print(grille_test._cases_revele(3,7))
     print("grille normal : \n")
     grille_test._affichage("non visible")
-    print("grille visible")
+    print("grille visible\n")
     grille_test._affichage()
+    print("autour\n")
+    print(grille_test._get_cases_voisins(3, 7))
+    print("indice a verifier\n")
+    print(grille_test._cases_a_verifier())
+    print("?? : \n")
+    print(grille_test._case_plus_probable())
 
+    
 
 

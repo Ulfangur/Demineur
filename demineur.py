@@ -85,11 +85,13 @@ def main():
     mdj(Tableau_Reponse,Tableau_Joueur)
 
 def mdj(Tableau_Reponse,Tableau_Joueur):
-    choix = int(input("Choix de joueurs : \n -> 0 Pour 2 joueurs\n -> 1 Pour Joueur et IA\n Votre choix : "))
+    choix = int(input("Choix de joueurs : \n -> 0 Pour 2 joueurs\n -> 1 Pour Joueur et IA\n -> 2 Pour 2 IA \n ->Votre choix : "))
     if (choix == 0):
         DeuxJoueurs(Tableau_Reponse,Tableau_Joueur)
     elif (choix == 1):
         JoueuretIA(Tableau_Reponse,Tableau_Joueur)
+    elif (choix == 2):
+        deuxIA(Tableau_Reponse,Tableau_Joueur)
     else:
         print("Vous avez mis un choix inexistant. Réessayez.")
         mdj(Tableau_Reponse,Tableau_Joueur)
@@ -205,5 +207,73 @@ def JoueuretIA(Tableau_Reponse,Tableau_Joueur):
     #if (choix == 1):
         #Tableau_Reponse.stockage_tableau()
     print("Merci d'avoir joué!")    
+
+
+def deuxIA(Tableau_Reponse,Tableau_Joueur):
+    Tableau_Reponse.stockage_tableau()
+    Profil_IA_2 = Joueur()
+    Profil_IA_1 = Joueur()
+    Grille_de_IA_1 = IA.Grille_IA()
+    Grille_de_IA_2 = IA.Grille_IA()
+    if (randint(0,1) == 1):
+        Profil_IA_2.changement_joueur(Profil_IA_1)
+    else:
+        Profil_IA_1.changement_joueur(Profil_IA_2 )
+    while (Tableau_Reponse.bombes != 0) and (Profil_IA_1.score <= 25) and (Profil_IA_2.score <= 25):
+        if (Profil_IA_1.tour == True):
+                print("A l'IA 1 de jouer")
+                temp = Profil_IA_1.score
+                Nb_tour = 0
+                while (temp < Profil_IA_1.score) or (Nb_tour == 0):
+                    Grille_de_IA_1.Play(Tableau_Joueur)
+                    Tableau_Joueur.affichage()
+                    separation()
+                    if temp < Profil_IA_1.score :
+                        temp = Profil_IA_1.score
+                    if len(Grille_de_IA_1.case_a_jouer) > 0:
+                        x = Grille_de_IA_1.case_a_jouer[0][0]
+                        y = Grille_de_IA_1.case_a_jouer[0][1]
+                    else:
+                        x = Grille_de_IA_1.case_probas[0][0]
+                        y = Grille_de_IA_1.case_probas[0][1]
+                    Revele(Tableau_Reponse,Tableau_Joueur,x,y,Profil_IA_1)
+                    Nb_tour = Nb_tour + 1
+                    print(f"x choisi par l'ia : {x}, y choisi par l'ia : {y}")
+                    attente = str(input(""))
+                print(f"Voici les scores: \n->IA 2 : {Profil_IA_2.score}\n->IA 1: {Profil_IA_1.score}")
+                Profil_IA_1.changement_joueur(Profil_IA_2)
+        else:
+            print("A l'IA de jouer")
+            temp = Profil_IA_2.score
+            Nb_tour = 0
+            while (temp < Profil_IA_2.score) or (Nb_tour == 0):
+                Grille_de_IA_2.Play(Tableau_Joueur)
+                Tableau_Joueur.affichage()
+                separation()
+                if temp < Profil_IA_2.score :
+                    temp = Profil_IA_2.score
+                if len(Grille_de_IA_2.case_a_jouer) > 0:
+                    x = Grille_de_IA_2.case_a_jouer[0][0]
+                    y = Grille_de_IA_2.case_a_jouer[0][1]
+                else:
+                    x = Grille_de_IA_2.case_probas[0][0]
+                    y = Grille_de_IA_2.case_probas[0][1]
+                Revele(Tableau_Reponse,Tableau_Joueur,x,y,Profil_IA_2)
+                Nb_tour = Nb_tour + 1
+                print(f"x choisi par l'ia : {x}, y choisi par l'ia : {y}")
+                attente = str(input(""))
+            print(f"Voici les scores: \n->IA 2 : {Profil_IA_2.score}\n->IA 1: {Profil_IA_1.score}")
+            Profil_IA_2.changement_joueur(Profil_IA_1)
+    print("Fin du jeu!\nVoici le gagnant... : ")
+    if (Profil_IA_2.score > 25) :
+        print(f"Victoire de l'IA 2 avec {Profil_IA_2.score} Bombes trouvées.\nL'IA 1 en avait {Profil_IA_1.score}")
+    elif (Profil_IA_1.score > 25) :
+        print(f"Victoire de l'IA 1  avec {Profil_IA_1.score} Bombes trouvées\n L'IA 2 en avait {Profil_IA_2.score}")
+    else:
+        print("égalité!")
+    #choix = int(input("Voulez vous stocker le Tableau de jeu entier? \1->Oui\n2->Non\nVotre choix : "))
+    #if (choix == 1):
+        #Tableau_Reponse.stockage_tableau()
+    print("Merci d'avoir joué!")
 
 main()
