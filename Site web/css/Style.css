@@ -1,0 +1,31 @@
+body{
+    background-color: grey;
+    color:lightblue;
+}
+
+a{
+    font-size: 30px;
+}
+tr,th{
+    margin-right:30px;
+    margin-left:30px;
+}
+#nonselect:not(:hover)>table{
+    display:none;
+}
+#nonselect:not(:hover)>#motclef{
+    display:block;
+}
+#nonselect:hover>table{
+    display:block;
+}
+#nonselect:hover>#motclef{
+    display:none;
+}
+
+#menu{
+    margin-left:42px;
+}
+tr>th{
+    padding-right:20px;
+}
