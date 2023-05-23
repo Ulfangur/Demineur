@@ -48,6 +48,12 @@ class Grille:
             Colonne = 0
         fic.close()
         self.bombes=50
+        for i in range(16):
+            for j in range(16):
+                self.tableau_jeu[i][j] = int(self.tableau_jeu[i][j])
+        #for i in range(16):
+            #for j in range(16):
+                #print(f"{self.tableau_jeu[i][j]} -> {type(self.tableau_jeu[i][j])}")
 
     def stockage_tableau(self):
         fic = open("Tableau_jeu.txt","w")

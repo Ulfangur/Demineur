@@ -91,7 +91,7 @@ class Grille_IA(Grille):
                     nb_case_vide = self.nombre_vide(i,j)
                     nb_bombes = self.nombre_bombes(i,j)
                     #print(self.tableau_jeu[i][j], type(self.tableau_jeu[i][j]), " ||| ", nb_bombes, type(nb_bombes), " Avant Bombes restantes")
-                    bombes_restantes = self.tableau_jeu[i][j]- nb_bombes
+                    bombes_restantes = int(self.tableau_jeu[i][j])- nb_bombes
                     if (bombes_restantes == nb_case_vide) :
                         self.coord_vide(i,j)
                     else:
