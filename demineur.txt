@@ -1,0 +1,59 @@
+main :
+	2 Choix : 
+		0 : tableau généré aléatoirement
+		1 : tableau venant d'un fichier
+		Dans les deux cas, le programme aura 2 variable:
+			Tableau_Reponse : Tableau qui contient les valeurs
+			Tableau_Joueur : Tableau que voient les joueurs
+		si le choix n'est pas 0 ou 1, relance main et retournera 1 pour l'erreur.
+	Le tableau s'enregistre dans un fichier txt ensuite avec stockage_tableau
+	
+main -> mdj 
+
+mdj : 
+	deux arguments: Tableau_reponse,tableau_joueur
+	2 choix :
+		0 : 2 joueurs -> appelle la fonction DeuxJoueurs
+		1 : Joueur + IA  -> appelle la fonction JoueuretIA
+	si le choix n'est pas 0 ou 1, relance mdj et retournera 1 pour l'erreur.
+
+mdj -> DeuxJoueurs 
+
+DeuxJoueurs :
+	Création des Deux joueurs
+	Joueur1 et Joueur 2
+	randint entre 0 et 1 pour savoir qui vas jouer entre le joueur 1 et le joueur 2 
+	boucle while avec comme conditions : 
+		Le nombre de bombes différent de 0 (décrémentation a chaque bombe trouvée)
+		Joueur1.score/Joueur2.score inférieur ou égal à 25
+	Tous lié par balise "ET"
+	
+	Deux Blocs, qui sont les mêmes juste en fonction de chaque joueur:
+		temp variable lié au score du joueur avant son choix de coordonées, 
+		puis si la variable temp et le score du joueur est différent,
+		alors il rejouera 
+		-> Donc on recommence le Bloc du joueur.
+		Si il ne tombe pas sur une bombe( donc même score que temp)
+		Alors on change de joueur.
+		
+	Quand la boucle while est finie,
+	alors on vas chercher qui a gagné avec des conditions.
+
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
