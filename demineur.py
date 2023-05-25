@@ -1,4 +1,5 @@
 from random import randint
+from random import seed
 import os
 import time
 
@@ -62,27 +63,28 @@ def main():
     """
     Lancement du Programme principal.
     """
-    choix:int = int(input("Choix du mode : \n -> 0 pour un tableau généré aléatoirement \n -> 1 Pour un tableau venant d'un fichier \n Votre choix : "))
+    choix:int = int(input("Choix du mode : \n -> 0 pour un tableau généré aléatoirement \n -> 1 Pour un tableau venant d'un fichier \n -> 10 Pour faire 50 parties et voir quelle ia gagnera \n Votre choix : "))
     if (choix == 0):
         Tableau_Reponse = Grille()
         Tableau_Reponse.tableau_mine_init()
-        Tableau_Reponse.affichage()
-        separation()
         Tableau_Joueur = Grille()
         Tableau_Joueur.tableau_joueur()
+        Tableau_Reponse.stockage_tableau()
+        mdj(Tableau_Reponse,Tableau_Joueur)
     elif (choix == 1):
         Tableau_Reponse = Grille()
         Tableau_Reponse.tableau_chargement()
-        Tableau_Reponse.affichage()
         separation()
         Tableau_Joueur = Grille()
         Tableau_Joueur.tableau_joueur()
+        Tableau_Reponse.stockage_tableau()
+        mdj(Tableau_Reponse,Tableau_Joueur)
+    elif (choix == 10):
+        Concours()
     else:
         print("Vous avez mis un choix inexistant. Réessayez.")
         main()
         return 1
-    Tableau_Reponse.stockage_tableau()
-    mdj(Tableau_Reponse,Tableau_Joueur)
 
 def mdj(Tableau_Reponse,Tableau_Joueur):
     choix = int(input("Choix de joueurs : \n -> 0 Pour 2 joueurs\n -> 1 Pour Joueur et IA\n -> 2 Pour 2 IA \n ->Votre choix : "))
@@ -276,4 +278,70 @@ def deuxIA(Tableau_Reponse,Tableau_Joueur):
         #Tableau_Reponse.stockage_tableau()
     print("Merci d'avoir joué!")
 
+def Concours():
+    score_IA1 = 0 # IA PERSO
+    score_IA2 = 0 # AUTRE IA
+    for i in range(50): #Nombre de parties jouées;
+        Tableau_Reponse = Grille()
+        Tableau_Reponse.tableau_mine_init()
+        Tableau_Joueur = Grille()
+        Tableau_Joueur.tableau_joueur()
+        score_IA1, score_IA2 = Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2)
+        print(f"Partie numéro {i+1}")
+    print(f"Voici les scores :\nPour l'ia extérieure, elle a gagnée {score_IA2}\nPour notre IA : {score_IA1} ")
+
+
+def Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2):
+    seed()
+    #IA PERSO
+    Profil_IA_1 = Joueur() 
+    Grille_de_IA_1 = IA.Grille_IA()
+    #AUTRE IA
+    Profil_IA_2 = Joueur()
+    Grille_de_IA_2 = IA.Grille_IA()
+
+    if (randint(0,1) == 1):
+        Profil_IA_2.changement_joueur(Profil_IA_1)#IA PERSO
+    else:
+        Profil_IA_1.changement_joueur(Profil_IA_2)#AUTRE IA
+
+    while (Tableau_Reponse.bombes != 0) and (Profil_IA_1.score <= 25) and (Profil_IA_2.score <= 25):
+        if (Profil_IA_1.tour == True):
+            temp = Profil_IA_1.score
+            Nb_tour = 0
+            while (temp < Profil_IA_1.score) or (Nb_tour == 0):
+                Grille_de_IA_1.Play(Tableau_Joueur)
+                if temp < Profil_IA_1.score :
+                    temp = Profil_IA_1.score
+                if len(Grille_de_IA_1.case_a_jouer) > 0:
+                    x = Grille_de_IA_1.case_a_jouer[0][0]
+                    y = Grille_de_IA_1.case_a_jouer[0][1]
+                else:
+                    x = Grille_de_IA_1.case_probas[0][0]
+                    y = Grille_de_IA_1.case_probas[0][1]
+                Revele(Tableau_Reponse,Tableau_Joueur,x,y,Profil_IA_1)
+                Nb_tour = Nb_tour + 1
+            Profil_IA_1.changement_joueur(Profil_IA_2)
+        else:
+            temp = Profil_IA_2.score
+            Nb_tour = 0
+            while (temp < Profil_IA_2.score) or (Nb_tour == 0):
+                Grille_de_IA_2.Play(Tableau_Joueur)
+                if temp < Profil_IA_2.score :
+                    temp = Profil_IA_2.score
+                if len(Grille_de_IA_2.case_a_jouer) > 0:
+                    x = Grille_de_IA_2.case_a_jouer[0][0]
+                    y = Grille_de_IA_2.case_a_jouer[0][1]
+                else:
+                    x = Grille_de_IA_2.case_probas[0][0]
+                    y = Grille_de_IA_2.case_probas[0][1]
+                Revele(Tableau_Reponse,Tableau_Joueur,x,y,Profil_IA_2)
+                Nb_tour = Nb_tour + 1
+            Profil_IA_2.changement_joueur(Profil_IA_1)
+    if (Profil_IA_2.score > 25) :
+        return score_IA1, score_IA2 + 1
+    elif (Profil_IA_1.score > 25) :
+        return score_IA1 + 1, score_IA2 
+    else:
+        return score_IA1, score_IA2
 main()

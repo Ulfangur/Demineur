@@ -18,3 +18,9 @@ class Joueur:
         else:
             self.tour = False
             other.tour = True
+    
+    def changement_joueur_compet(self):
+        if self.tour == False:
+            self.tour = True
+        else:
+            self.tour = False

@@ -1,6 +1,7 @@
 from Class1 import Grille
 import math
 from random import randint
+from random import seed
 
 class Fraction:
     def __init__(self,x,y):
@@ -82,9 +83,9 @@ class Grille_IA(Grille):
                     self.tableau_jeu[a + x][b + y] = "\\"
     
     def jouer(self):
+        seed()
         self.case_a_jouer = []
         self.case_probas = []
-        self.affichage()
         for i in range(16):
             for j in range(16):
                 if ((self.tableau_jeu[i][j] != 0) and (self.tableau_jeu[i][j] != "." and (self.tableau_jeu[i][j] != "B") and (self.tableau_jeu[i][j] != "\\"))) : 
@@ -111,10 +112,6 @@ class Grille_IA(Grille):
                 if (self.tableau_jeu[x][y] == "."):
                     booleen = False
                     self.case_a_jouer = [(x,y)]
-        print("Case a jouer: ")
-        self.case_a_jouer_affichage()
-        print("Case Probas : ")
-        self.case_proba_affichage()
 
     def probas(self,a,b,nb_bombes_reste):
         """(Appliqué si on a pas le nombre précis)
@@ -259,7 +256,6 @@ class Grille_IA(Grille):
     def Play(self,other):
         self.update(other)
         self.jouer()
-
 
 if __name__ == "__main__":
     Test = Grille_IA()
