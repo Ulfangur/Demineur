@@ -1,10 +1,10 @@
-L'ia doit Trouver les bombes elle même.
+IA explication : 
 
-Idées : 
-    -> Aléatoire Si pas d'idées 
-    -> Les bombes a 1.
-
-
-Problèmes que je pourrais rencontrer : 
-    -> Bordures
-    -> Programme long a lancer
+    self.play(Tableau_Joueur) : Prend en argument le tableau vu par le joueur
+    ---> Crée un tableau de case sûre et de cases moins sures avec des probas;
+    ---> On prend en priorité les cases sures(case_a_jouer)
+    ---> les cases probas sont (normalement) triés par ordre décroissant 
+            Et on prend la plus grande probas si on a pas de cas sur pour jouer.
+    
+Pour changer de joueur et le calcul de score, cela se fait pas par l'IA,
+c'est une classe a part.

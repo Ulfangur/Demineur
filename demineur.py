@@ -280,19 +280,22 @@ def deuxIA(Tableau_Reponse,Tableau_Joueur):
 
 def Concours():
     score_IA1 = 0 # IA PERSO
+    gagnant_commence_IA_1 = 0
     score_IA2 = 0 # AUTRE IA
-    for i in range(50): #Nombre de parties jouées;
+    gagnant_commence_IA_2 = 0
+    j = int(input("Nb de parties : "))
+    for i in range(j): #Nombre de parties jouées;
         print(f"Partie numéro {i+1}")
         Tableau_Reponse = Grille()
         Tableau_Reponse.tableau_mine_init()
         Tableau_Joueur = Grille()
         Tableau_Joueur.tableau_joueur()
-        score_IA1, score_IA2 = Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2)
+        score_IA1, score_IA2, gagnant_commence_IA_1, gagnant_commence_IA_2 = Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2,gagnant_commence_IA_1, gagnant_commence_IA_2)
         
-    print(f"Voici les scores :\nPour l'ia extérieure, elle a gagnée {score_IA2}\nPour notre IA : {score_IA1} ")
+    print(f"Voici les scores :\nPour l'ia extérieure, elle a gagnée {score_IA2}, dont {gagnant_commence_IA_2} ou elle a commencée \nPour notre IA : {score_IA1}, dont {gagnant_commence_IA_1} ou elle a commencée.\nIl y a donc eu {j-(score_IA1 + score_IA2)} égalité.")
 
 
-def Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2):
+def Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2,gagnant_commence_IA_1, gagnant_commence_IA_2):
     seed()
     #IA PERSO
     Profil_IA_1 = Joueur() 
@@ -302,9 +305,12 @@ def Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2):
     Grille_de_IA_2 = IA.Grille_IA()
 
     if (randint(0,1) == 1):
-        Profil_IA_2.changement_joueur(Profil_IA_1)#IA PERSO
+        
+        Profil_IA_2.changement_joueur(Profil_IA_1)
+        qui_premier = "IA2"
     else:
-        Profil_IA_1.changement_joueur(Profil_IA_2)#AUTRE IA
+        Profil_IA_1.changement_joueur(Profil_IA_2)
+        qui_premier = "IA1"
 
     while (Tableau_Reponse.bombes != 0) and (Profil_IA_1.score <= 25) and (Profil_IA_2.score <= 25):
         if (Profil_IA_1.tour == True):
@@ -340,9 +346,15 @@ def Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2):
                 Nb_tour = Nb_tour + 1
             Profil_IA_2.changement_joueur(Profil_IA_1)
     if (Profil_IA_2.score > 25) :
-        return score_IA1, score_IA2 + 1
+        if qui_premier == "IA2":
+            return score_IA1, score_IA2 + 1, gagnant_commence_IA_1, gagnant_commence_IA_2 + 1
+        else:
+            return score_IA1, score_IA2 + 1, gagnant_commence_IA_1, gagnant_commence_IA_2
     elif (Profil_IA_1.score > 25) :
-        return score_IA1 + 1, score_IA2 
+        if qui_premier == "IA1":
+            return score_IA1+ 1, score_IA2 , gagnant_commence_IA_1 + 1 , gagnant_commence_IA_2
+        else:
+            return score_IA1+ 1, score_IA2 , gagnant_commence_IA_1, gagnant_commence_IA_2
     else:
-        return score_IA1, score_IA2
+        return score_IA1, score_IA2, gagnant_commence_IA_1, gagnant_commence_IA_2
 main()
