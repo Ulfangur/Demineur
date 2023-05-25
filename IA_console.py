@@ -2,6 +2,7 @@ from Class1 import Grille
 import math
 from random import randint
 from random import seed
+import time
 
 class Fraction:
     def __init__(self,x,y):
@@ -35,7 +36,6 @@ class Grille_IA(Grille):
         Case Probas sont les cas Moins sur, mais il sont sous la forme suivante : (x,y,probabilité)"""
         self.taille:int = 16
         self.tableau_jeu:list = [[0 for i in range(self.taille)]for j in range(self.taille)]
-        self.bombes:int = 0
         self.case_a_jouer = []
         self.case_probas = []
         self.tableau_joueur()
@@ -86,8 +86,11 @@ class Grille_IA(Grille):
         seed()
         self.case_a_jouer = []
         self.case_probas = []
+        compteur_bombes = 50
         for i in range(16):
             for j in range(16):
+                if self.tableau_jeu == "B":
+                    compteur_bombes = compteur_bombes - 1
                 if ((self.tableau_jeu[i][j] != 0) and (self.tableau_jeu[i][j] != "." and (self.tableau_jeu[i][j] != "B") and (self.tableau_jeu[i][j] != "\\"))) : 
                     nb_case_vide = self.nombre_vide(i,j)
                     nb_bombes = self.nombre_bombes(i,j)
@@ -102,14 +105,20 @@ class Grille_IA(Grille):
         pas_fiable = False
         if (len(self.case_a_jouer)==0):
             if (len(self.case_probas) != 0):
-                if self.case_probas[1][2].flottant() < 0.4 :
-                    pas_fiable = True
+                if compteur_bombes > 40 :
+                    if self.case_probas[1][2].flottant() < 0.4 :
+                        pas_fiable = True
+                else:
+                    if self.case_probas[1][2].flottant() < 0.3:
+                        pas_fiable = True
         if (((len(self.case_a_jouer) == len(self.case_probas))and len(self.case_probas)==0) or pas_fiable):
             booleen = True
             while booleen:
+                #print("Ici ca bloque")
+                #time.sleep(0.1)
                 x = randint(0,15)
                 y = randint(0,15)
-                if (self.tableau_jeu[x][y] == "."):
+                if (self.tableau_jeu[x][y] == ".") or (self.tableau_jeu[x][y] == "\\"):
                     booleen = False
                     self.case_a_jouer = [(x,y)]
 

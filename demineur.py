@@ -282,12 +282,13 @@ def Concours():
     score_IA1 = 0 # IA PERSO
     score_IA2 = 0 # AUTRE IA
     for i in range(50): #Nombre de parties jouées;
+        print(f"Partie numéro {i+1}")
         Tableau_Reponse = Grille()
         Tableau_Reponse.tableau_mine_init()
         Tableau_Joueur = Grille()
         Tableau_Joueur.tableau_joueur()
         score_IA1, score_IA2 = Concours_jeu(Tableau_Reponse,Tableau_Joueur,score_IA1,score_IA2)
-        print(f"Partie numéro {i+1}")
+        
     print(f"Voici les scores :\nPour l'ia extérieure, elle a gagnée {score_IA2}\nPour notre IA : {score_IA1} ")
 
 
