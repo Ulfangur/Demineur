@@ -33,7 +33,7 @@ if missing:
 
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, \
     QPushButton, QLabel, QMessageBox, QVBoxLayout, QLayout, QDialog, QRadioButton, QHBoxLayout
-from PyQt5.QtCore import QSize, QRect
+from PyQt5.QtCore import QSize, QRect, Qt
 from PyQt5.QtGui import QFont
 from classe_grille import Demineur
 from time import sleep
@@ -49,12 +49,12 @@ dict_style_boutons = {
     "bouton 6" : "QPushButton {color: turquoise; background-color: white;}",
     "bouton 7" : "QPushButton {color: black; background-color: white;}",
     "bouton 8" : "QPushButton {color: grey; background-color: white;}",
-    "bouton bombe j1" : "QPushButton {color: red; background-color: black;}",
-    "bouton bombe j2" : "QPushButton {color: blue; background-color: black;}",
+    "bouton bombe j1" : "QPushButton {color: red; background-color: #3f3f40;}",
+    "bouton bombe j2" : "QPushButton {color: #0563fa; background-color: #3f3f40;}",
     "bouton non révelé" : "QPushButton {background-color: #a5a8a6; border: 1px solid black;}",
 }
 
-
+        
 
 class UI_Demineur(QWidget):
     def __init__(self, lignes=16, colonnes=16):
@@ -73,7 +73,6 @@ class UI_Demineur(QWidget):
         self.contre_ia:bool = True
         self.adversaire_dialog()
         self.initUI()
-        print(self.contre_ia)
 
     def initUI(self):
         self.setWindowTitle('Démineur')
@@ -124,18 +123,21 @@ class UI_Demineur(QWidget):
         Boite de dialogue pour choisir si on veut jouer contre une IA ou non.
         """
         adversaire_dialog = QDialog()
-
+        adversaire_dialog.setWindowTitle("Séléction de l'adversaire")
         vbox = QVBoxLayout()
+        vbox_menu = QVBoxLayout()
 
         label = QLabel("Sélectionnez l'adversaire :")
+        label.setStyleSheet("QLabel {font-size: 14px;}")
         vbox.addWidget(label)
 
         humain = QRadioButton("Humain")
         ia = QRadioButton("IA")
 
-        vbox.addWidget(humain)
-        vbox.addWidget(ia)
+        vbox_menu.addWidget(humain)
+        vbox_menu.addWidget(ia)
 
+        vbox.addLayout(vbox_menu)
         humain.setChecked(True)
 
         def on_button_clicked():
@@ -231,7 +233,7 @@ class UI_Demineur(QWidget):
                     self.tour_ia = True
 
                 bouton_ia.setText("*")
-            QApplication.processEvents()
+            QApplication.processEvents() #force la mise a jour de l'interface
 
 
 
@@ -270,7 +272,6 @@ class UI_Demineur(QWidget):
     
 
     def _test_clic_ia(self, coord):
-        print(coord)
         for i in range(len(self.liste_bouton)):
             if self.liste_bouton[i][0] == coord:
                 bouton = self.liste_bouton[i][1]
@@ -282,6 +283,11 @@ if __name__ == '__main__':
     game = UI_Demineur()
     sys.exit(app.exec_())
 
+def lancer_demineur(): #fonction pour importer le démineur dans d'autres fichier
+                        #sans devoir importer la classe UI_Demineur
+    app = QApplication(sys.argv)
+    game = UI_Demineur()
+    sys.exit(app.exec_())
     
 
 
