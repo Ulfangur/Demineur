@@ -18,6 +18,44 @@ from PyQt5.QtGui import QFont
 from classe_grille import Demineur
 from time import sleep
 
+import sys
+import subprocess
+import pkg_resources
+
+#installe PyQt5 si il n'est pas présent
+required = {'PyQt5'}
+installed = {pkg.key for pkg in pkg_resources.working_set}
+missing = required - installed
+
+if missing:
+    python = sys.executable
+    subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
+
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, \
+    QPushButton, QLabel, QMessageBox, QVBoxLayout, QLayout, QDialog, QRadioButton, QHBoxLayout
+from PyQt5.QtCore import QSize, QRect
+from PyQt5.QtGui import QFont
+from classe_grille import Demineur
+from time import sleep
+
+dict_style_boutons = {
+
+    "bouton 0" : "QPushButton {color: white; background-color: white;}",
+    "bouton 1" : "QPushButton {color: blue; background-color: white;}",
+    "bouton 2" : "QPushButton {color: green; background-color: white;}",
+    "bouton 3" : "QPushButton {color: red; background-color: white;}",
+    "bouton 4" : "QPushButton {color: purple; background-color: white;}",
+    "bouton 5" : "QPushButton {color: maroon; background-color: white;}",
+    "bouton 6" : "QPushButton {color: turquoise; background-color: white;}",
+    "bouton 7" : "QPushButton {color: black; background-color: white;}",
+    "bouton 8" : "QPushButton {color: grey; background-color: white;}",
+    "bouton bombe j1" : "QPushButton {color: red; background-color: black;}",
+    "bouton bombe j2" : "QPushButton {color: blue; background-color: black;}",
+    "bouton non révelé" : "QPushButton {background-color: #a5a8a6; border: 1px solid black;}",
+}
+
+
+
 class UI_Demineur(QWidget):
     def __init__(self, lignes=16, colonnes=16):
         super().__init__()
@@ -40,25 +78,32 @@ class UI_Demineur(QWidget):
     def initUI(self):
         self.setWindowTitle('Démineur')
         vbox = QVBoxLayout()
+        vbox_child = QVBoxLayout()
+        hbox = QHBoxLayout()
         self.setLayout(vbox)
         self.score_j1_label = QLabel(f"Score Joueur 1 : {self.joueur1}")
         self.score_j2_label = QLabel(f"Score Joueur 2 : {self.joueur2}")
         self.tour_label = QLabel(f"Tour du joueur 1 (Rouge)")
-        vbox.addWidget(self.score_j1_label)
-        vbox.addWidget(self.score_j2_label)
-        vbox.addWidget(self.tour_label)
-        
+        self.score_j1_label.setStyleSheet("QLabel {font-size: 24px;}")
+        self.score_j2_label.setStyleSheet("QLabel {font-size: 24px;}")
+        self.tour_label.setStyleSheet("QLabel {font-size: 24px;}")
+        vbox_child.addWidget(self.score_j1_label)
+        vbox_child.addWidget(self.score_j2_label)
+        hbox.addLayout(vbox_child)
+        hbox.addWidget(self.tour_label)
+        vbox.addLayout(hbox)
 
         tabgrille = self.grille_non_visible
         grille = QGridLayout()
-        grille.setSpacing(4)
-        grille.setSizeConstraint(QLayout.SetFixedSize)
+        grille.setSpacing(2)
+        
         vbox.addLayout(grille)
         for lignes in range(self.lignes):
             for colonnes in range(self.colonnes):
                 button = QPushButton()
                 button.setFont(QFont('Times', 15))
                 button.setFixedSize(QSize(30, 30))
+                button.setStyleSheet(dict_style_boutons["bouton non révelé"])
                 
                 valeur = str(tabgrille[lignes][colonnes])
                 if valeur == "-1":
@@ -138,15 +183,17 @@ class UI_Demineur(QWidget):
                     if tuple_indice == bouton[0]:
                         valeur = str(self.grille_visible[tuple_indice[0]][tuple_indice[1]])
                         bouton[1].setText(valeur)
+                        bouton[1].setStyleSheet(dict_style_boutons[f"bouton {valeur}"])
+                        
         else:
             if self.tour == 1 and button.text() != "*":
                 self.joueur1 += 1
                 self.score_j1_label.setText(f"Score Joueur 1 : {self.joueur1}")
-                button.setStyleSheet('QPushButton {color: red;}')
+                button.setStyleSheet(dict_style_boutons["bouton bombe j1"])
             elif self.tour == 2 and button.text() != "*":
                 self.joueur2 += 1
                 self.score_j2_label.setText(f"Score Joueur 2 : {self.joueur2}")
-                button.setStyleSheet('QPushButton {color: blue;}')
+                button.setStyleSheet(dict_style_boutons["bouton bombe j2"])
                 if self.contre_ia:
                     QApplication.processEvents()
                     self.tour_ia = True
@@ -175,11 +222,12 @@ class UI_Demineur(QWidget):
                         if tuple_indice == bouton[0]:
                             valeur = str(self.grille_visible[tuple_indice[0]][tuple_indice[1]])
                             bouton[1].setText(valeur)
+                            bouton[1].setStyleSheet(dict_style_boutons[f"bouton {valeur}"])
             else:
                 if bouton_ia.text() != "*":
                     self.joueur2 += 1
                     self.score_j2_label.setText(f"Score Joueur 2 : {self.joueur2}")
-                    bouton_ia.setStyleSheet('QPushButton {color: blue;}')
+                    bouton_ia.setStyleSheet(dict_style_boutons["bouton bombe j2"])
                     self.tour_ia = True
 
                 bouton_ia.setText("*")
@@ -233,5 +281,8 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = UI_Demineur()
     sys.exit(app.exec_())
+
+    
+
 
     
