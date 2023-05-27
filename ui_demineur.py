@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, \
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont
 from classe_grille import Demineur
+from time import sleep
 
 class UI_Demineur(QWidget):
     def __init__(self, lignes=16, colonnes=16):
@@ -30,7 +31,8 @@ class UI_Demineur(QWidget):
         self.joueur2 = 0
         self.tour = 1 # le joueur 1 par défaut commence
         self.J_Gagnant = None
-        self.contre_ia:bool
+        self.tour_ia = False
+        self.contre_ia:bool = True
         self.adversaire_dialog()
         self.initUI()
         print(self.contre_ia)
@@ -125,9 +127,11 @@ class UI_Demineur(QWidget):
                 self.tour = 2
                 if self.contre_ia:
                     self._tour_de_ia()
+                    self.tour_ia = True
             elif self.tour == 2 and button.text() == " ":
                 self.tour_label.setText("Tour du Joueur 1 (Rouge)")
                 self.tour = 1
+                self.tour_ia = False
                 
             for tuple_indice in indice_a_modif:
                 for bouton in self.liste_bouton:
@@ -144,9 +148,45 @@ class UI_Demineur(QWidget):
                 self.score_j2_label.setText(f"Score Joueur 2 : {self.joueur2}")
                 button.setStyleSheet('QPushButton {color: blue;}')
                 if self.contre_ia:
-                    self._tour_de_ia()
+                    QApplication.processEvents()
+                    self.tour_ia = True
 
             button.setText("*")
+
+        while self.tour_ia and self.contre_ia:
+            sleep(0.4)
+            bouton_ia = self._tour_de_ia()
+            indice_a_modif = []
+            pos:tuple #tuple des coordonnées (x,y)
+            for elem in self.liste_bouton:
+                if bouton_ia == elem[1]:
+                    pos = elem[0]
+            indice_a_modif = self.demineur._cases_revele(pos[0], pos[1])
+
+            if indice_a_modif[0] != "bombe":
+
+                if bouton_ia.text() == " ":
+                    self.tour_label.setText("Tour du Joueur 1 (Rouge)")
+                    self.tour = 1
+                    self.tour_ia = False
+                    
+                for tuple_indice in indice_a_modif:
+                    for bouton in self.liste_bouton:
+                        if tuple_indice == bouton[0]:
+                            valeur = str(self.grille_visible[tuple_indice[0]][tuple_indice[1]])
+                            bouton[1].setText(valeur)
+            else:
+                if bouton_ia.text() != "*":
+                    self.joueur2 += 1
+                    self.score_j2_label.setText(f"Score Joueur 2 : {self.joueur2}")
+                    bouton_ia.setStyleSheet('QPushButton {color: blue;}')
+                    self.tour_ia = True
+
+                bouton_ia.setText("*")
+            QApplication.processEvents()
+
+
+
 
         if UI_Demineur._est_fini(self):
             UI_Demineur._fin_de_partie(self)
@@ -178,7 +218,7 @@ class UI_Demineur(QWidget):
     
     def _tour_de_ia(self):
         indice_ia = self.demineur._case_plus_probable()
-        self._test_clic_ia(indice_ia)
+        return self._test_clic_ia(indice_ia)
     
 
     def _test_clic_ia(self, coord):
@@ -186,7 +226,7 @@ class UI_Demineur(QWidget):
         for i in range(len(self.liste_bouton)):
             if self.liste_bouton[i][0] == coord:
                 bouton = self.liste_bouton[i][1]
-        self.on_button_clicked(bouton)
+        return bouton
             
 
 if __name__ == '__main__':
