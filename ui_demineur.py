@@ -34,7 +34,7 @@ if missing:
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, \
     QPushButton, QLabel, QMessageBox, QVBoxLayout, QLayout, QDialog, QRadioButton, QHBoxLayout
 from PyQt5.QtCore import QSize, QRect, Qt
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon
 from classe_grille import Demineur
 from time import sleep
 
@@ -115,7 +115,7 @@ class UI_Demineur(QWidget):
         
         for button in self.liste_bouton:
             button[1].clicked.connect(self.on_button_clicked)
-
+        QApplication.setWindowIcon(QIcon("logo_demineur.jpg"))
         self.show()
     
     def adversaire_dialog(self):
@@ -123,6 +123,7 @@ class UI_Demineur(QWidget):
         Boite de dialogue pour choisir si on veut jouer contre une IA ou non.
         """
         adversaire_dialog = QDialog()
+        adversaire_dialog.setWindowIcon(QIcon("logo_demineur.jpg"))
         adversaire_dialog.setWindowTitle("Séléction de l'adversaire")
         vbox = QVBoxLayout()
         vbox_menu = QVBoxLayout()
@@ -257,6 +258,7 @@ class UI_Demineur(QWidget):
     def _fin_de_partie(self):
         UI_Demineur._resultat(self)
         msgFin = QMessageBox()
+        msgFin.setWindowIcon(QIcon("logo_demineur.jpg"))
         msgFin.setIcon(QMessageBox.Information)
         if self.J_Gagnant != 0:
             msgFin.setText(f"Le gagnant est le joueur {self.J_Gagnant} avec {max(self.joueur1,self.joueur2)} points. Bravo !")
