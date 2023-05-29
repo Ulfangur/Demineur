@@ -1,5 +1,6 @@
 from random import randint
 from pprint import pprint
+from time import sleep
 
 class Demineur:
 
@@ -16,7 +17,7 @@ class Demineur:
 
     def _affichage(self, grille="visible"):
         """
-        Affiche la grille visible avec toutes les bombes
+        Affiche la grille dans la console
         param:  par defaut affiche la grille visible.
                 Sinon affiche la grille de jeu avec 
                 les cases non révélés.
@@ -72,9 +73,10 @@ class Demineur:
 
                     self.grille[i][j] = nb_bombes
 
-    
-
     def _creation_grille(self):
+        """
+        Initialise la grille
+        """
         self._place_bombe()
         self._voisins_bombes()
     
@@ -106,6 +108,9 @@ class Demineur:
     
     
     def _cases_a_verifier(self):
+        """
+        Retourne une liste des coordonnées des cases qui contiennent une ou plusieurs mines adjacentes
+        """
         liste_indice = []
         for i in range(self.ligne):
             for j in range(self.colonne):
@@ -114,6 +119,9 @@ class Demineur:
         return liste_indice
     
     def _get_cases_voisins(self, x, y):
+        """
+        Retourne les indices des cases voisines
+        """
         liste_indice = []
         for dx, dy in ((-1,-1),(-1, 0),(-1, 1),(0,-1),(0,1),(1,-1),(1,0),(1,1)):
             new_x, new_y = dx + x, dy + y
@@ -122,6 +130,10 @@ class Demineur:
         return liste_indice
     
     def _contraintes(self):
+        """
+        Retourne une liste de contraintes qui representent le nombre de mines restantes
+        parmis les cases voisines non révelés.
+        """
         indices = self._cases_a_verifier()
         liste_contraintes = []
         nb_bombes:int
@@ -136,30 +148,17 @@ class Demineur:
                 elif self.grille_non_visible[dx][dy] == "?":
                     cases_nn_revele.append((dx,dy))
             if self.grille_non_visible[x][y] > nb_bombes:
-                mines_restantes = nb_bombes - self.grille_non_visible[x][y]
+                mines_restantes = self.grille_non_visible[x][y] - nb_bombes
                 contrainte:set = (set(cases_nn_revele), mines_restantes)
                 liste_contraintes.append(contrainte)
-            
-        i = 0
-        while i < len(liste_contraintes):
-            j = i + 1
-            while j < len(liste_contraintes):
-                cases_i, mines_i = liste_contraintes[i]
-                cases_j, mines_j = liste_contraintes[j]
-                if cases_j.issubset(cases_i):
-                    cases_diff = cases_i - cases_j
-                    if len(cases_diff) > 0:
-                        liste_contraintes[i] = (cases_diff, mines_i - mines_j)
-                elif cases_i.issubset(cases_j):
-                    cases_diff = cases_j - cases_i
-                    if len(cases_diff) > 0:
-                        liste_contraintes[j] = (cases_diff, mines_j - mines_i)
-                j += 1
-            i += 1
-
+        
         return liste_contraintes
     
     def _intersection(self, contraintes):
+        """
+        Verifie pour chaque paire de contrainte si ils partagent des cases voisines non révelés 
+        et créé une nouvelle contrainte
+        """
         new_liste_c = []
         for i in range(len(contraintes)):
             for j in range(i + 1, len(contraintes)):
@@ -172,24 +171,30 @@ class Demineur:
 
 
     def _probabilite(self, contraintes):
+        """
+        Retourne un dictionnaire avec toutes les probabilités pour chaque indice
+        """
         probabilite = {}
         for cases, mines in contraintes:
             for case in cases:
                 prob = mines / len(cases)
                 if case not in probabilite or prob > probabilite[case]:
-                    probabilite[case] = abs(prob)
+                    probabilite[case] = prob
         return probabilite
     
     def _case_plus_probable(self):
+        """
+        Renvoie la case avec la plus grande probabilité de contenir une mine
+        """
         contraintes = self._contraintes()
         contraintes += self._intersection(contraintes)
         probabilites = self._probabilite(contraintes)
-        #print("Probabilité :\n")
-        #pprint(probabilites)
         if probabilites:
             plus_probable = max(probabilites, key=probabilites.get)
         else:
             plus_probable = (randint(0, self.ligne-1), randint(0, self.colonne-1))
+            while self.grille_non_visible[plus_probable[0]][plus_probable[1]] != "?":
+                plus_probable = (randint(0, self.ligne-1), randint(0, self.colonne-1))
         return plus_probable
 
 
@@ -197,7 +202,9 @@ class Demineur:
 if __name__ == '__main__':
     
     grille_test = Demineur()
-    print(grille_test._cases_revele(3,7))
+    grille_test._cases_revele(3,7)
+    grille_test._cases_revele(3,8)
+    print(grille_test._cases_revele(4,7))
     print("grille normal : \n")
     grille_test._affichage("non visible")
     print("grille visible\n")

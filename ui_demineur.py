@@ -35,7 +35,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, \
     QPushButton, QLabel, QMessageBox, QVBoxLayout, QLayout, QDialog, QRadioButton, QHBoxLayout
 from PyQt5.QtCore import QSize, QRect, Qt
 from PyQt5.QtGui import QFont, QIcon
-from classe_grille import Demineur
 from time import sleep
 
 dict_style_boutons = {
@@ -75,6 +74,9 @@ class UI_Demineur(QWidget):
         self.initUI()
 
     def initUI(self):
+        """
+        Initialisation de l'interface et du démineur
+        """
         self.setWindowTitle('Démineur')
         vbox = QVBoxLayout()
         vbox_child = QVBoxLayout()
@@ -114,9 +116,10 @@ class UI_Demineur(QWidget):
                 grille.addWidget(button, lignes, colonnes)
         
         for button in self.liste_bouton:
-            button[1].clicked.connect(self.on_button_clicked)
-        QApplication.setWindowIcon(QIcon("logo_demineur.jpg"))
-        self.show()
+            button[1].clicked.connect(self.on_button_clicked) 
+
+        QApplication.setWindowIcon(QIcon("logo_demineur.jpg")) #logo de l'interface
+        self.show() #affichage de l'interface
     
     def adversaire_dialog(self):
         """
@@ -142,6 +145,9 @@ class UI_Demineur(QWidget):
         humain.setChecked(True)
 
         def on_button_clicked():
+            """
+            Action lorsqu'on valide notre choix
+            """
             if humain.isChecked():
                 self.contre_ia = False
             else:
@@ -203,8 +209,9 @@ class UI_Demineur(QWidget):
 
             button.setText("*")
 
+        #boucle lorsque l'ia joue plusieurs fois d'affilés
         while self.tour_ia and self.contre_ia:
-            sleep(0.4)
+            sleep(0.2)
             bouton_ia = self._tour_de_ia()
             indice_a_modif = []
             pos:tuple #tuple des coordonnées (x,y)
@@ -232,30 +239,36 @@ class UI_Demineur(QWidget):
                     self.score_j2_label.setText(f"Score Joueur 2 : {self.joueur2}")
                     bouton_ia.setStyleSheet(dict_style_boutons["bouton bombe j2"])
                     self.tour_ia = True
-
                 bouton_ia.setText("*")
+
             QApplication.processEvents() #force la mise a jour de l'interface
-
-
-
 
         if UI_Demineur._est_fini(self):
             UI_Demineur._fin_de_partie(self)
-            QApplication.quit()
+            QApplication.quit() #ferme tout
             return
                  
     def _est_fini(self):
+        """
+        Vérifie si la partie est terminé
+        """
         return self.joueur1 + self.joueur2 == self.demineur.bombe #si toutes les mines ont été trouvé 
     
     def _resultat(self):
+        """
+        La fonction détermine le gagnant ou égalité
+        """
         if self.joueur1 > self.joueur2:
-            self.J_Gagnant = 1
+            self.J_Gagnant = 1 
         elif self.joueur2 > self.joueur1:
             self.J_Gagnant = 2
         else:
-            self.J_Gagnant = 0
+            self.J_Gagnant = 0 #égalité
     
     def _fin_de_partie(self):
+        """
+        Affiche le message de fin avec le gagnant (ou égalité) et ferme le jeu.
+        """
         UI_Demineur._resultat(self)
         msgFin = QMessageBox()
         msgFin.setWindowIcon(QIcon("logo_demineur.jpg"))
@@ -269,27 +282,32 @@ class UI_Demineur(QWidget):
         msgFin.exec_()
     
     def _tour_de_ia(self):
+        """
+        Fait jouer 1 tour a l'IA en récupérant l'indice et le bouton associé
+        """
         indice_ia = self.demineur._case_plus_probable()
         return self._test_clic_ia(indice_ia)
     
 
     def _test_clic_ia(self, coord):
+        """
+        Renvoie le bouton associé aux coordonnées donné par l'IA
+        """
         for i in range(len(self.liste_bouton)):
             if self.liste_bouton[i][0] == coord:
                 bouton = self.liste_bouton[i][1]
         return bouton
             
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    game = UI_Demineur()
-    sys.exit(app.exec_())
-
 def lancer_demineur(): #fonction pour importer le démineur dans d'autres fichier
                         #sans devoir importer la classe UI_Demineur
     app = QApplication(sys.argv)
     game = UI_Demineur()
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    lancer_demineur()
     
 
 
