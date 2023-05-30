@@ -5,27 +5,26 @@ a{
 tr,th{
     margin-right:30px;
     margin-left:30px;
+    padding-right:20px;
 }
-#nonselect:not(:hover)>table{
+#btnControl {
     display:none;
 }
-#nonselect:not(:hover)>#motclef{
-    display:block;
-}
-#nonselect:hover>table{
-    display:block;
-}
-#nonselect:hover>#motclef{
+#btnControl:not(:checked) +label > table{
     display:none;
+}
+#btnControl:checked + label> table{
+    display:block;
 }
 #logo_univ{
     margin-left:72%;
 }
 #menu{
     margin-left:42px;
+    display:block
 }
-tr>th{
-    padding-right:20px;
+table{
+    display:block;
 }
 /* Partie a changer surement*/
 body{
@@ -33,3 +32,11 @@ body{
     color:lightblue;
     font-size: 30px;
 }
+
+#motclef{
+    width: 75px;
+    height:75px;
+}
+/* TEST pour test.html */
+
+
